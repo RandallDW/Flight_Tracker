@@ -18,20 +18,23 @@ __version__ = "1.0.0"
 		location_add(str): location address
 	Returns:
 		(location.latitude, location.longitude)(tuple):
-				insert location's latitude and longitude
+				inserted location's coordinate
 """
-def getLocation(location_add):
+def getLocationCoord(location_add):
 	geolocator = Nominatim()
 	location = geolocator.geocode(location_add)
 	return (location.latitude, location.longitude)
 
-
-
-
+"""
+	main function
+"""
 if __name__ == "__main__":
-	location = getLocation('Blacksburg, VA')
+	location = getLocationCoord('Blacksburg, VA')
 	nearest = NearestAirport(location[0], location[1])
 	nearest.findAirport()
+
+	
+
 	#print (nearest.airport_one)
 	#print ((nearest.airports_info[2]))
 
