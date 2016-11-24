@@ -31,7 +31,7 @@ def isValidAirport(airport_code):
 	else:
 		return False
 
-	
+
 """
 	check if date is valid
 """
@@ -85,6 +85,9 @@ if __name__ == "__main__":
 		nearest = NearestAirport(location[0], location[1])
 		nearest.findAirport()
 		#print(nearest.airport_one)
+
+		#for i in range (0,2):
+
 
 	else:
 		print('Invalid command line arguements...');
