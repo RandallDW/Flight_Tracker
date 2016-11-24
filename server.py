@@ -30,22 +30,6 @@ class Weather(object):
 		self.weather_text = weather.text
 
 
-def recving(recvID, sendID, name):
-	global a_lock
-	while 1:
-		time.sleep(1)
-		print(name + 'client')
-		#data = recvID.recv(1024)
-		#if data:
-			#print(data)
-		#	a_lock.acquire()
-#			received_data = data.decode('utf-8')
-		#	print (name, ' received data: ', data)
-			#time.sleep(0.1)
-			#dataAnalysis(received_data)
-#			sendID.send(received_data.encode())
-		#	a_lock.release()
-
 class ClientThread(threading.Thread):
 
 	def __init__(self,clientsocket,id):
@@ -54,10 +38,14 @@ class ClientThread(threading.Thread):
 		self.id = id
 		print ("[+] New thread started ")
 
-	def run(self):    
+	def run(self): 
+		count = 0
 		while True:
 			time.sleep(1)
 			print("Id is " + str(self.id))
+			count += 1
+			if (count == 20):
+				break
 
 
 class LEDThread(threading.Thread):
@@ -67,7 +55,7 @@ class LEDThread(threading.Thread):
 	def run(self):
 		while 1:
 			time.sleep(1)
-			print(self.num)
+			print(threading.active_count() - 2)
 	def increment(self):
 		self.num += 1
 	def decrement(self):
@@ -91,6 +79,7 @@ class Server(object):
 		self.server.bind((self.host, port))
 
 	def startListen(self):
+		# LED thread
 		led = LEDThread(self.clientIndex)
 		led.start()
 
@@ -99,22 +88,11 @@ class Server(object):
 			print ('server started and listening ')
 			self.client[self.clientIndex], self.address[self.clientIndex] = self.server.accept()
 
-			#pass clientsock to the ClientThread thread object being created
-
+			#pass client socket 
 			newthread = ClientThread(self.client[self.clientIndex], self.clientIndex)
 			newthread.start()
 			self.clientIndex += 1
 			led.increment()
-		"""
-		while True:
-			print('listen')
-			time.sleep(1)
-			self.client[self.clientIndex], self.address[self.clientIndex] = self.server.accept()
-			self.clientIndex += 1
-			_thread.start_new_thread(recving(self.client[self.clientIndex], \
-									self.client[self.clientIndex], str(self.clientIndex)))
-	
-"""
 
 
 #class Flight(object):
