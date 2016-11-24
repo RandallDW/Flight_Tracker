@@ -1,3 +1,4 @@
+
 import requests
 import json
 
@@ -16,10 +17,11 @@ class NearestAirport(object):
 	Attributes:
         latitude: location latitude
         longitude: location longitude
-    """
+	"""
 	def __init__(self, latitude, longitude):
 		self.latitude = latitude
 		self.longitude = longitude
+		self.user_key = 'c64311a5a1ec2577df9bf80e65815324'
 
 	"""
 		- airport_one
@@ -30,8 +32,9 @@ class NearestAirport(object):
 			airport three information
 	"""
 	def findAirport(self):
+		#print(self.longitude, self.latitude)
 		request_front = 'https://airport.api.aero/airport/nearest/'
-		request_tail  = '?maxAirports=3&user_key=c64311a5a1ec2577df9bf80e65815324'
+		request_tail  = '?maxAirports=3&user_key=' + self.user_key
 		request = request_front + str(self.latitude) + '/' + str(self.longitude) + request_tail
 		self.data = requests.get(request)
 
@@ -46,5 +49,7 @@ class NearestAirport(object):
 		self.airport_one = self.airport_info[0]
 		self.airport_two = self.airport_info[1]
 		self.airport_three = self.airport_info[2]
+
+
 		
 

@@ -2,6 +2,9 @@
 import requests
 import json
 
+"""
+	airport_code (str)
+"""
 class Weather(object):
 	def __init__(self, airport_code):
 		self.airport_code = airport_code
@@ -19,12 +22,17 @@ class Weather(object):
 		request = url + self.location + api_key
 		weather = requests.get(request)
 		self.weather_text = weather.text
-		print(self.weather_text)
+		
+
+#class Flight(object):
+#	def __init__(self, origin, destination, date):
+
 """
 main function
 """
 if __name__ == "__main__":
 	weather = Weather('ROA')
+	print(weather.weather_text)
 	#airport_code = 'ROA'
 	#data = requests.get( + airport_code)
 	
