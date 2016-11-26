@@ -29,84 +29,88 @@ class Weather(object):
 		weather = requests.get(request)
 		self.weather_text = weather.text
 
+"""
 
-class ClientThread(threading.Thread):
+"""
+class ClientThread(threading.Thread) :
 
-	def __init__(self,clientsocket,id):
+	def __init__(self,clientsocket):
 		threading.Thread.__init__(self)
 		self.csocket = clientsocket
-		self.id = id
+		#self.id = id
 		print ("[+] New thread started ")
 
 	def run(self): 
 		count = 0
 		while True:
 			time.sleep(1)
-			print("Id is " + str(self.id))
+			#print("Id is " + str(self.id))
 			count += 1
-			if (count == 20):
+			if (count == 5):
+				self.csocket.close()
+				self.csocket = None
 				break
+				
+"""
 
-
+"""
 class LEDThread(threading.Thread):
-	def __init__(self, num):
+	def __init__(self):
 		threading.Thread.__init__(self)
-		self.num = num
 	def run(self):
 		while 1:
 			time.sleep(1)
 			print(threading.active_count() - 2)
-	def increment(self):
-		self.num += 1
-	def decrement(self):
-		self.num -= 1
+		
+			#print(Server.backlog)
+			#if (Server.client[0] == None):
+			#	print("NONE")
+	#def count_1(self):
 
+"""
 
-
+"""
 class Server(object):
 	def __init__(self, hostAdd):
 		self.host = hostAdd
 		self.backlog = 5
-		self.clientIndex = 0
+		self.client = None
+		self.address = None
 		self.openServer()
-		#self.startListen()
+		self.startListen()
+
 	def openServer(self):
 		port = 2000
-		size = 1024
-		self.client = [None] * self.backlog
-		self.address = [None] * self.backlog
+		size = 1024		
 		self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.server.bind((self.host, port))
 
 	def startListen(self):
 		# LED thread
-		led = LEDThread(self.clientIndex)
+		led = LEDThread()
 		led.start()
 
+		error_msg = '<socket.socket [closed] fd=-1, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0>'
 		while True:
 			self.server.listen(self.backlog)
-			print ('server started and listening ')
-			self.client[self.clientIndex], self.address[self.clientIndex] = self.server.accept()
+			print ('server started and listening..')
+			self.client, self.address = self.server.accept()
 
 			#pass client socket 
-			newthread = ClientThread(self.client[self.clientIndex], self.clientIndex)
+			newthread = ClientThread(self.client)
 			newthread.start()
-			self.clientIndex += 1
-			led.increment()
+			
 
 
-#class Flight(object):
-#	def __init__(self, origin, destination, date):
 
 """
-main function
+	main function
 """
 if __name__ == "__main__":
 
 	a_lock = _thread.allocate_lock()
 	host = ''
 	server = Server(host)
-	server.startListen()
 
 	
 	
