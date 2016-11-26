@@ -1,6 +1,7 @@
 import sys
 import json
 import time
+import socket
 import requests
 import datetime
 from nearestAirport import NearestAirport
@@ -37,12 +38,12 @@ def isValidAirport(airport_code):
 """
 def isValidDate(date):
 	try:
-	    valid_date = time.strptime(date, '%Y-%m-%d')
-	    today_date=str(datetime.date.today())
-	    if date < today_date:
-	        return False
-	    else:
-	        return True
+		valid_date = time.strptime(date, '%Y-%m-%d')
+		today_date=str(datetime.date.today())
+		if date < today_date:
+			return False
+		else:
+			return True
 	except ValueError:
 		return False
 								
@@ -57,6 +58,25 @@ def getLocationCoord(location_add):
 	geolocator = Nominatim()
 	location = geolocator.geocode(location_add)
 	return (location.latitude, location.longitude)
+
+
+class Server():
+	def __init__(self, host):
+		self.host = host
+		self.port = 2000
+		self.size = 1024	
+		self.server = None
+		self.connectToServer()
+	def connectToServer(self):
+		self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.server.connect((self.host, self.port))
+		print ('Connect to server')
+	def sendMsgToServer(self, payload_dict):
+		payload_str = json.dumps(payload_dict)
+		self.server.send(payload_str.encode('utf-8'))
+	def recvAnsFromServer(self):
+		self.data = self.server.recv(self.size)
+
 
 """
 	main function
@@ -86,7 +106,26 @@ if __name__ == "__main__":
 		nearest.findAirport()
 		#print(nearest.airport_one)
 
-		#for i in range (0,2):
+		host = ''
+		server = Server(host)
+
+		#create question payload 
+		payload = {
+			'first':  nearest.airport_one_code, \
+			'second': nearest.airport_two_code, \
+			'third':  nearest.airport_three_code, \
+			'destnation' : destnation, \
+			'date':	  date
+		}
+
+		#send question payload to server
+		server.sendMsgToServer(payload)
+
+		#receive answer payload from server
+		server.recvAnsFromServer()
+
+
+	
 
 
 	else:
