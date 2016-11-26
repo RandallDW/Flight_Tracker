@@ -50,6 +50,11 @@ class NearestAirport(object):
 		self.airport_two = self.airport_info[1]
 		self.airport_three = self.airport_info[2]
 
+		self.airport_one_code = self.airport_one.get('code')
+		self.airport_two_code = self.airport_two.get('code')
+		self.airport_three_code = self.airport_three.get('code')
+
+
 
 		
 
