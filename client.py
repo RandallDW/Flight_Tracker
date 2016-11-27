@@ -70,11 +70,13 @@ class Server():
 	def connectToServer(self):
 		self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.server.connect((self.host, self.port))
-		print ('Connect to server')
+		print ('Connect to server..')
 	def sendMsgToServer(self, payload_dict):
 		payload_str = json.dumps(payload_dict)
 		self.server.send(payload_str.encode('utf-8'))
+		print('Sent message to server..')
 	def recvAnsFromServer(self):
+		print('Waiting answer from server..')
 		self.data = self.server.recv(self.size)
 
 
