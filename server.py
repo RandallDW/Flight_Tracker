@@ -39,6 +39,7 @@ class FlightInfo(object):
 	def getInfo(self):
 		api_key = "AIzaSyCXUADGIAa5BkzzRUh8CbIWFFAzKYoTCd4"
 		url = "https://www.googleapis.com/qpxExpress/v1/trips/search?key=" + api_key
+		headers = {'content-type': 'application/json'}
 		params = {
 		  "request": {
 		    "slice": [
@@ -51,7 +52,7 @@ class FlightInfo(object):
 		    "passengers": {
 		      "adultCount": 1
 		    },
-		    "solutions": 1,
+		    "solutions": 5,
 		    "refundable": False
 		  }
 		}
@@ -73,7 +74,7 @@ class ClientThread(threading.Thread) :
 	def __init__(self,clientsocket):
 		threading.Thread.__init__(self)
 		self.csocket = clientsocket
-		self.size = 1024
+		self.size = 4096
 		#self.id = id
 		print ("[+] New thread started ")
 
@@ -93,24 +94,25 @@ class ClientThread(threading.Thread) :
 
 		#destination weather
 		destination_weather = Weather(destination)
-		print(destination_weather.weather_text)
+		#print(destination_weather.weather_text)
 
 		find_flight = False
 		trips_data = None
 		for i in range (0,3):
 			flightInfo = FlightInfo(airports[i], destination, date)
-			trips_data = flightInfo.trips_data
+			trips_data = flightInfo.getInfo()
 			if trips_data != None:
 				find_flight = True
 				break
 		
 
 		# create answer payload
-		if find_flight == False:
-			# to do
-		else:
-			# to do
-		#
+		weather_dict = json.loads(destination_weather.weather_text)
+		answer = {"weather": weather_dict,"flight": trips_data}
+		
+		answer_str = json.dumps(answer)
+		self.csocket.send(answer_str.encode('utf-8'))
+		print(answer_str)		
 		#airport_one = flightInfo()
 
 		"""
