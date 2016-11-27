@@ -31,12 +31,11 @@ class Weather(object):
 """
 
 """
-class flightInfo(object):
+class FlightInfo(object):
 	def __init__(self, origin, destination, date):
 		self.origin = origin
 		self.destination = destination
 		self.date = date
-		self.getInfo()
 	def getInfo(self):
 		api_key = "AIzaSyCXUADGIAa5BkzzRUh8CbIWFFAzKYoTCd4"
 		url = "https://www.googleapis.com/qpxExpress/v1/trips/search?key=" + api_key
@@ -62,9 +61,9 @@ class flightInfo(object):
 		self.trips_data = trips_text.get('data')
 
 		if self.trips_data.get('airport') == None:
-			self.info = None
+			return None
 		else:
-			self.info = self.trips_data 
+			return self.trips_data 
 
 """
 client thread, 
@@ -80,8 +79,40 @@ class ClientThread(threading.Thread) :
 
 	def run(self): 
 		question_byte = self.csocket.recv(self.size)
-		question_str  = decode(question_byte, 'utf-8')
-		print(question_str)
+		question_str  = question_byte.decode("utf-8") 
+		question_dict = json.loads(question_str)
+
+		airports = [None] * 3
+
+		airports[0] = question_dict.get("first")
+		airports[1] = question_dict.get("second")
+		airports[2] = question_dict.get("third")
+
+		destination = question_dict.get("destination")
+		date = question_dict.get("date")
+
+		#destination weather
+		destination_weather = Weather(destination)
+		print(destination_weather.weather_text)
+
+		find_flight = False
+		trips_data = None
+		for i in range (0,3):
+			flightInfo = FlightInfo(airports[i], destination, date)
+			trips_data = flightInfo.trips_data
+			if trips_data != None:
+				find_flight = True
+				break
+		
+
+		# create answer payload
+		if find_flight == False:
+			# to do
+		else:
+			# to do
+		#
+		#airport_one = flightInfo()
+
 		"""
 		count = 0
 		while True:
@@ -137,9 +168,9 @@ class Server(object):
 		led.start()
 
 		error_msg = '<socket.socket [closed] fd=-1, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0>'
+		print ('server started and listening..')
 		while True:
 			self.server.listen(self.backlog)
-			print ('server started and listening..')
 			self.client, self.address = self.server.accept()
 
 			#pass client socket 
@@ -157,9 +188,3 @@ if __name__ == "__main__":
 	a_lock = _thread.allocate_lock()
 	host = ''
 	server = Server(host)
-
-	
-	
-
-	weather = Weather('ROA')
-	print(weather.weather_text)
