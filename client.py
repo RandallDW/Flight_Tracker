@@ -87,8 +87,30 @@ class Server():
 		if self.flightInfo == None:
 			print('No flight available on this date..')
 		else:
+			# print out weather information
 			print("Weather: ")
+
+			weather_info_name = self.weather.get("name")
+
+			weather_info_weather = self.weather.get("weather")
+			weather_info_weather_main = weather_info_weather[0].get('main')
+			weather_info_weather_desc = weather_info_weather[0].get('description')
+
+			weather_info_main_dict = self.weather.get("main")
+			weather_info_main_temp_kelvin = weather_info_main_dict.get("temp")
+			weather_info_main_temp_fahrenheit = (weather_info_main_temp_kelvin - 273) * 9/5 + 32
+
+			weather_info_main_temp_humidity = weather_info_main_dict.get("humidity")
+
+			print("\t Name: \t\t\t" + weather_info_name)
+			print("\t Main:	\t\t" + weather_info_weather_main)
+			print("\t Description: \t\t" + weather_info_weather_desc)
+			print("\t Temperature: \t\t" + str(weather_info_main_temp_fahrenheit) + " (Fahrenheit)")
+			print("\t Humidity: \t\t" + str(weather_info_main_temp_humidity)) 
+
+
 			print("Flight Info:")
+			# to do, print out flight information
 
 
 """
@@ -144,22 +166,3 @@ if __name__ == "__main__":
 	else:
 		print('Invalid command line arguements...');
 		sys.exit(-1);
-
-
-	
-
-	#print (nearest.airport_one)
-	#print ((nearest.airports_info[2]))
-
-	#print (nearest.data.json())
-	#print (nearest.data.headers['content-type'])
-	
-	#print(type(nearest.airports_info[0]))
-	#print(type(json_type))
-	#print (json_type)
-	#print (str(location[0]))
-
-	#data = requests.get('https://airport.api.aero/airport/nearest/30/-80?maxAirports=3&user_key=c64311a5a1ec2577df9bf80e65815324')
-	#print (data.text)
-		
-
