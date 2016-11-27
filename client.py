@@ -77,8 +77,17 @@ class Server():
 		print('Sent message to server..')
 	def recvAnsFromServer(self):
 		print('Waiting answer from server..')
-		self.data = self.server.recv(self.size)
-		print (self.data)
+		self.data_byte = self.server.recv(self.size)
+		self.data_str  = self.data_byte.decode("utf-8")
+		self.data_dict = json.loads(self.data_str)
+		self.weather   = self.data_dict.get("weather")
+		self.flightInfo = self.data_dict.get("flight")
+
+		if self.flightInfo == None:
+			print('No flight available on this date..')
+		else:
+			print("Weather: ")
+			print("Flight Info:")
 
 
 """
