@@ -64,7 +64,7 @@ class Server():
 	def __init__(self, host):
 		self.host = host
 		self.port = 2000
-		self.size = 1024	
+		self.size = 4096	
 		self.server = None
 		self.connectToServer()
 	def connectToServer(self):
@@ -78,6 +78,7 @@ class Server():
 	def recvAnsFromServer(self):
 		print('Waiting answer from server..')
 		self.data = self.server.recv(self.size)
+		print (self.data)
 
 
 """
