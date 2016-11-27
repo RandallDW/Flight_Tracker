@@ -82,7 +82,7 @@ class Server():
 
 """
 	main function
-	client.py "current location" "destnation airport code" "date" 
+	client.py "current location" "destination airport code" "date" 
 """
 if __name__ == "__main__":
 	if len(sys.argv) == 4:
@@ -94,7 +94,7 @@ if __name__ == "__main__":
 		date = argvlist [3]
 		
 		# check airport code
-		if isValidAirport(destnation) == False:
+		if isValidAirport(destination) == False:
 			print ('Invalid airport code...')
 			sys.exit(-1)
 
