@@ -64,7 +64,7 @@ class Server():
 	def __init__(self, host):
 		self.host = host
 		self.port = 2000
-		self.size = 4096	
+		self.size = 8192	
 		self.server = None
 		self.connectToServer()
 	def connectToServer(self):
@@ -82,6 +82,7 @@ class Server():
 		self.data_dict = json.loads(self.data_str)
 		self.weather   = self.data_dict.get("weather")
 		self.flightInfo = self.data_dict.get("flight")
+		print(self.data_byte)
 
 		if self.flightInfo == None:
 			print('No flight available on this date..')

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 import json
-import socket
 import time
-import requests
+import socket
 import _thread
+import requests
 import threading
-
+#import RPi.GPIO as GPIO
 
 
 """
@@ -37,7 +37,7 @@ class FlightInfo(object):
 		self.destination = destination
 		self.date = date
 	def getInfo(self):
-		api_key = "AIzaSyCXUADGIAa5BkzzRUh8CbIWFFAzKYoTCd4"
+		api_key = "AIzaSyDfJi43GJLQjCOeyhCb4NKlaUfybycHcPQ"
 		url = "https://www.googleapis.com/qpxExpress/v1/trips/search?key=" + api_key
 		headers = {'content-type': 'application/json'}
 		params = {
@@ -59,12 +59,14 @@ class FlightInfo(object):
 		response = requests.post(url, data=json.dumps(params), headers=headers)
 		data = response.json()
 		trips_text = data.get('trips')
+
 		self.trips_data = trips_text.get('data')
 
 		if self.trips_data.get('airport') == None:
 			return None
 		else:
 			return self.trips_data 
+
 
 """
 client thread, 
@@ -74,7 +76,7 @@ class ClientThread(threading.Thread) :
 	def __init__(self,clientsocket):
 		threading.Thread.__init__(self)
 		self.csocket = clientsocket
-		self.size = 4096
+		self.size = 8192
 		#self.id = id
 		print ("[+] New thread started ")
 
@@ -109,10 +111,9 @@ class ClientThread(threading.Thread) :
 		# create answer payload
 		weather_dict = json.loads(destination_weather.weather_text)
 		answer = {"weather": weather_dict,"flight": trips_data}
-		
+		print(answer)
 		answer_str = json.dumps(answer)
-		self.csocket.send(answer_str.encode('utf-8'))
-		print(answer_str)		
+		self.csocket.send(answer_str.encode('utf-8'))	
 		#airport_one = flightInfo()
 
 		"""
@@ -137,7 +138,7 @@ class LEDThread(threading.Thread):
 		self.num = 0;
 	def run(self):
 		while 1:
-			time.sleep(1)
+			time.sleep(2)
 			self.num = threading.active_count() - 2
 			print(self.num)
 		
