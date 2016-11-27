@@ -90,7 +90,7 @@ if __name__ == "__main__":
 		for index in range(len(sys.argv)):
 			argvlist.append(sys.argv[index])
 		#print (argvlist)	
-		destnation = argvlist[2]
+		destination = argvlist[2]
 		date = argvlist [3]
 		
 		# check airport code
@@ -116,7 +116,7 @@ if __name__ == "__main__":
 			'first':  nearest.airport_one_code, \
 			'second': nearest.airport_two_code, \
 			'third':  nearest.airport_three_code, \
-			'destnation' : destnation, \
+			'destination' : destination, \
 			'date':	  date
 		}
 
