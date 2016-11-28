@@ -82,7 +82,6 @@ class Server():
 		self.data_dict = json.loads(self.data_str)
 		self.weather   = self.data_dict.get("weather")
 		self.flightInfo = self.data_dict.get("flight")
-		print(self.data_byte)
 
 		if self.flightInfo == None:
 			print('No flight available on this date..')
@@ -110,6 +109,11 @@ class Server():
 
 
 			print("Flight Info:")
+			for i in range (0, len(self.flightInfo)):
+				if self.flightInfo[i] != None:
+					print("\t Solution %d" % (i + 1))
+					print('\t' + self.flightInfo[i] + '\n')
+
 			# to do, print out flight information
 
 
