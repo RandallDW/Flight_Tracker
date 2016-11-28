@@ -99,7 +99,7 @@ class FlightInfo(object):
 							departureTime = leg[n].get('departureTime')
 							arrivalTime	= leg[n].get('arrivalTime')
 							
-							flight_str = origin + ' ' + destination + ' ' + departureTime + ' ' + arrivalTime 
+							flight_str = origin + '\t' + destination + '\t' + departureTime + '\t' + arrivalTime 
 							flight_list.append(flight_str)
 				flightInfo[i] = flight_list
 			return [flightInfo, flightPrice]

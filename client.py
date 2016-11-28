@@ -114,6 +114,7 @@ class Server():
 			for i in range (0, len(self.flight)):
 				if self.flight[i] != None:
 					print("\t Solution# %d: Sale Price: %s" % (i + 1, self.price[i]) )
+					print ("\t\tOrigin\tDestination\tDepartureTime\tArrivalTime")
 					for j in range (0, len(self.flight[i])):
 						print ("\t\t" + (self.flight[i])[j])
 
