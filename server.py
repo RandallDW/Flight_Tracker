@@ -7,6 +7,10 @@ import requests
 import threading
 #import RPi.GPIO as GPIO
 
+"""
+global
+"""
+global solution_num
 
 """
 	airport_code (str)
@@ -41,7 +45,7 @@ class FlightInfo(object):
 		self.destination = destination
 		self.date = date
 	def getInfo(self):
-		api_key = "AIzaSyDfJi43GJLQjCOeyhCb4NKlaUfybycHcPQ"
+		api_key = "AIzaSyAzhRKsVomussZwM3GSX76kz2dPdDhNt5w"
 		url = "https://www.googleapis.com/qpxExpress/v1/trips/search?key=" + api_key
 		headers = {'content-type': 'application/json'}
 		params = {
@@ -56,7 +60,7 @@ class FlightInfo(object):
 		    "passengers": {
 		      "adultCount": 1
 		    },
-		    "solutions": 10,
+		    "solutions": solution_num,
 		    "refundable": False
 		  }
 		}
@@ -69,13 +73,19 @@ class FlightInfo(object):
 		if self.trips_data.get('airport') == None: 
 			return None
 		else:
-			trip_option = trips_text.get('tripOption')
-			flightInfo = [None] * 10
+			#global solution_num
 
+			trip_option = trips_text.get('tripOption')
+			flightInfo = [None] * solution_num
+			flightPrice = [None] * solution_num
 			
 			for i in range (0, len(trip_option)):
 				flight_str = ''
+				flight_list = []
 				tripInfo = trip_option[i]
+
+				price = tripInfo.get('saleTotal')
+				flightPrice[i] = price
 
 				data_slice = tripInfo.get('slice')
 				data_length = len(data_slice)
@@ -88,9 +98,11 @@ class FlightInfo(object):
 							destination = leg[n].get('destination')
 							departureTime = leg[n].get('departureTime')
 							arrivalTime	= leg[n].get('arrivalTime')
-							flight_str += origin + ' ' + destination + ' ' + departureTime + ' ' + arrivalTime + '\n'
-				flightInfo[i] = flight_str
-			return flightInfo
+							
+							flight_str = origin + ' ' + destination + ' ' + departureTime + ' ' + arrivalTime 
+							flight_list.append(flight_str)
+				flightInfo[i] = flight_list
+			return [flightInfo, flightPrice]
 
 
 """
@@ -138,7 +150,7 @@ class ClientThread(threading.Thread) :
 		# create answer payload
 		weather_dict = json.loads(destination_weather.weather_text)
 		answer = {"weather": weather_dict,"flight": trips_data}
-		print(answer)
+		
 		answer_str = json.dumps(answer)
 		self.csocket.send(answer_str.encode('utf-8'))	
 		#airport_one = flightInfo()
@@ -218,7 +230,8 @@ class Server(object):
 	main function
 """
 if __name__ == "__main__":
-
+	global solution_num
+	solution_num = 20
 	a_lock = _thread.allocate_lock()
 	host = ''
 	server = Server(host)
