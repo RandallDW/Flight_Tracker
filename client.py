@@ -109,10 +109,13 @@ class Server():
 
 
 			print("Flight Info:")
-			for i in range (0, len(self.flightInfo)):
-				if self.flightInfo[i] != None:
-					print("\t Solution %d" % (i + 1))
-					print('\t' + self.flightInfo[i] + '\n')
+			self.flight = self.flightInfo[0]
+			self.price = self.flightInfo[1]
+			for i in range (0, len(self.flight)):
+				if self.flight[i] != None:
+					print("\t Solution# %d: Sale Price: %s" % (i + 1, self.price[i]) )
+					for j in range (0, len(self.flight[i])):
+						print ("\t\t" + (self.flight[i])[j])
 
 			# to do, print out flight information
 
