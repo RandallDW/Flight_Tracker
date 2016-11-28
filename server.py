@@ -28,8 +28,12 @@ class Weather(object):
 		request = url + self.location + api_key
 		weather = requests.get(request)
 		self.weather_text = weather.text
-"""
 
+
+"""
+	origin (str):	origin airport code
+	destination (str): destination airport code
+	date (str): date
 """
 class FlightInfo(object):
 	def __init__(self, origin, destination, date):
@@ -52,7 +56,7 @@ class FlightInfo(object):
 		    "passengers": {
 		      "adultCount": 1
 		    },
-		    "solutions": 5,
+		    "solutions": 10,
 		    "refundable": False
 		  }
 		}
@@ -61,15 +65,38 @@ class FlightInfo(object):
 		trips_text = data.get('trips')
 
 		self.trips_data = trips_text.get('data')
-
-		if self.trips_data.get('airport') == None:
+		#print (data)
+		if self.trips_data.get('airport') == None: 
 			return None
 		else:
-			return self.trips_data 
+			trip_option = trips_text.get('tripOption')
+			flightInfo = [None] * 10
+
+			
+			for i in range (0, len(trip_option)):
+				flight_str = ''
+				tripInfo = trip_option[i]
+
+				data_slice = tripInfo.get('slice')
+				data_length = len(data_slice)
+				for j in range (0, data_length):
+					segment = data_slice[j].get('segment')
+					for k in range (0, len(segment)):
+						leg = segment[k].get('leg')
+						for n in range (0, len(leg)):
+							origin = leg[n].get('origin')
+							destination = leg[n].get('destination')
+							departureTime = leg[n].get('departureTime')
+							arrivalTime	= leg[n].get('arrivalTime')
+							flight_str += origin + ' ' + destination + ' ' + departureTime + ' ' + arrivalTime + '\n'
+				flightInfo[i] = flight_str
+			return flightInfo
 
 
 """
-client thread, 
+	client thread
+
+	clientsocket (socket)
 """
 class ClientThread(threading.Thread) :
 
@@ -129,6 +156,8 @@ class ClientThread(threading.Thread) :
 				self.csocket = None
 				break
 		"""
+
+		
 """
 LED thread, control 7 segement LED show coresponding client number
 """
@@ -136,6 +165,7 @@ class LEDThread(threading.Thread):
 	def __init__(self):
 		threading.Thread.__init__(self)
 		self.num = 0;
+	#	self.num (int): client number
 	def run(self):
 		while 1:
 			time.sleep(2)
@@ -148,7 +178,8 @@ class LEDThread(threading.Thread):
 	#def count_1(self):
 
 """
-server 
+	server 
+	hostAdd (str): host ip address
 """
 class Server(object):
 	def __init__(self, hostAdd):
