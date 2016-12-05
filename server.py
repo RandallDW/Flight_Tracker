@@ -66,8 +66,9 @@ class FlightInfo(object):
 		}
 		response = requests.post(url, data=json.dumps(params), headers=headers)
 		data = response.json()
-		trips_text = data.get('trips')
 
+		trips_text = data.get('trips')
+		#print(trips_text)
 		self.trips_data = trips_text.get('data')
 		#print (data)
 		if self.trips_data.get('airport') == None: 
@@ -78,7 +79,7 @@ class FlightInfo(object):
 			trip_option = trips_text.get('tripOption')
 			flightInfo = [None] * solution_num
 			flightPrice = [None] * solution_num
-			
+			print(trip_option)
 			for i in range (0, len(trip_option)):
 				flight_str = ''
 				flight_list = []
@@ -93,13 +94,21 @@ class FlightInfo(object):
 					segment = data_slice[j].get('segment')
 					for k in range (0, len(segment)):
 						leg = segment[k].get('leg')
+						flight_dict = segment[k].get("flight")
+						#print(type(flight_dict))
+						#print (flight_dict)
+						flight_number = flight_dict.get("number")
+						flight_carrier = flight_dict.get("carrier")
+						print(flight_number)
+						print(flight_carrier)
 						for n in range (0, len(leg)):
 							origin = leg[n].get('origin')
 							destination = leg[n].get('destination')
 							departureTime = leg[n].get('departureTime')
-							arrivalTime	= leg[n].get('arrivalTime')
+							arrivalTime	= leg[n].get('arrivalTime')	
 							
-							flight_str = origin + '\t' + destination + '\t' + departureTime + '\t' + arrivalTime 
+							flight_str = flight_carrier + ' ' + str(flight_number)+ '\t' + origin + \
+											'\t' + destination + '\t' + departureTime + '\t' + arrivalTime 
 							flight_list.append(flight_str)
 				flightInfo[i] = flight_list
 			return [flightInfo, flightPrice]
