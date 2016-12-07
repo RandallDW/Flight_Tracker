@@ -156,7 +156,7 @@ class GUI(QMainWindow):
 		elif year == '' or month == '' or day == '':
 			self.widget.enter_date()
 		else:
-			self.connectToServer()
+			
 			check_airport = self.isValidAirport(destination)
 			check_date = self.isValidDate(date)
 
@@ -166,7 +166,7 @@ class GUI(QMainWindow):
 				self.widget.show_invalid_date_msg()
 			else:
 				self.widget.reset_error_msg_label()
-
+				self.connectToServer()
 				location = self.getLocationCoord(name)
 				nearest = NearestAirport(location[0], location[1])
 				nearest.findAirport()
