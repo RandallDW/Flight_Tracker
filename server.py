@@ -45,7 +45,7 @@ class FlightInfo(object):
 		self.destination = destination
 		self.date = date
 	def getInfo(self):
-		api_key = "AIzaSyAzhRKsVomussZwM3GSX76kz2dPdDhNt5w"
+		api_key = "AIzaSyDfJi43GJLQjCOeyhCb4NKlaUfybycHcPQ"
 		url = "https://www.googleapis.com/qpxExpress/v1/trips/search?key=" + api_key
 		headers = {'content-type': 'application/json'}
 		params = {
@@ -79,7 +79,7 @@ class FlightInfo(object):
 			trip_option = trips_text.get('tripOption')
 			flightInfo = [None] * solution_num
 			flightPrice = [None] * solution_num
-			print(trip_option)
+			#print(trip_option)
 			for i in range (0, len(trip_option)):
 				flight_str = ''
 				flight_list = []
@@ -95,20 +95,27 @@ class FlightInfo(object):
 					for k in range (0, len(segment)):
 						leg = segment[k].get('leg')
 						flight_dict = segment[k].get("flight")
+						booking_code_count = segment[k].get("bookingCodeCount")
 						#print(type(flight_dict))
 						#print (flight_dict)
+
 						flight_number = flight_dict.get("number")
 						flight_carrier = flight_dict.get("carrier")
-						print(flight_number)
-						print(flight_carrier)
+						
+						
 						for n in range (0, len(leg)):
+							meal = leg[n].get("meal")
+							if meal == None:
+								meal = '-'
+								
 							origin = leg[n].get('origin')
 							destination = leg[n].get('destination')
 							departureTime = leg[n].get('departureTime')
 							arrivalTime	= leg[n].get('arrivalTime')	
 							
-							flight_str = flight_carrier + ' ' + str(flight_number)+ '\t' + origin + \
-											'\t' + destination + '\t' + departureTime + '\t' + arrivalTime 
+							flight_str = flight_carrier + ' ' + str(flight_number)+ "\t\t" + origin + \
+											'\t' + destination + '\t' + departureTime + '\t' + arrivalTime \
+												+ '\t' + str(booking_code_count)  + '\t' + meal
 							flight_list.append(flight_str)
 				flightInfo[i] = flight_list
 			return [flightInfo, flightPrice]
@@ -133,50 +140,55 @@ class ClientThread(threading.Thread) :
 		question_str  = question_byte.decode("utf-8") 
 		question_dict = json.loads(question_str)
 
-		airports = [None] * 3
+		flight_status = question_dict.get("Flight Status")
+		if flight_status == False:
+			airports = [None] * 3
 
-		airports[0] = question_dict.get("first")
-		airports[1] = question_dict.get("second")
-		airports[2] = question_dict.get("third")
+			airports[0] = question_dict.get("first")
+			airports[1] = question_dict.get("second")
+			airports[2] = question_dict.get("third")
 
-		destination = question_dict.get("destination")
-		date = question_dict.get("date")
+			destination = question_dict.get("destination")
+			date = question_dict.get("date")
 
-		#destination weather
-		destination_weather = Weather(destination)
-		#print(destination_weather.weather_text)
+			#destination weather
+			destination_weather = Weather(destination)
+			#print(destination_weather.weather_text)
 
-		find_flight = False
-		trips_data = None
-		for i in range (0,3):
-			flightInfo = FlightInfo(airports[i], destination, date)
-			trips_data = flightInfo.getInfo()
-			if trips_data != None:
-				find_flight = True
-				break
-		
+			find_flight = False
+			trips_data = None
+			for i in range (0,3):
+				flightInfo = FlightInfo(airports[i], destination, date)
+				trips_data = flightInfo.getInfo()
+				if trips_data != None:
+					find_flight = True
+					break		
 
-		# create answer payload
-		weather_dict = json.loads(destination_weather.weather_text)
-		answer = {"weather": weather_dict,"flight": trips_data}
-		
-		answer_str = json.dumps(answer)
-		self.csocket.send(answer_str.encode('utf-8'))	
-		#airport_one = flightInfo()
-
-		"""
-		count = 0
-		while True:
-			time.sleep(1)
-			#print("Id is " + str(self.id))
+			# create answer payload
+			weather_dict = json.loads(destination_weather.weather_text)
+			answer = {"weather": weather_dict,"flight": trips_data}
 			
-			print(data)
-			count += 1
-			if (count == 5):
-				self.csocket.close()
-				self.csocket = None
-				break
-		"""
+			answer_str = json.dumps(answer)
+			self.csocket.send(answer_str.encode('utf-8'))	
+			#airport_one = flightInfo()
+
+			"""
+			count = 0
+			while True:
+				time.sleep(1)
+				#print("Id is " + str(self.id))
+				
+				print(data)
+				count += 1
+				if (count == 5):
+					self.csocket.close()
+					self.csocket = None
+					break
+			"""
+		else:
+			# to do 
+			print(" ")
+
 
 		
 """
