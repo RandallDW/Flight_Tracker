@@ -121,6 +121,7 @@ class FlightInfo(object):
 			return [flightInfo, flightPrice]
 
 
+
 """
 	client thread
 
@@ -154,7 +155,6 @@ class ClientThread(threading.Thread) :
 			#destination weather
 			destination_weather = Weather(destination)
 			#print(destination_weather.weather_text)
-
 			find_flight = False
 			trips_data = None
 			for i in range (0,3):
@@ -170,24 +170,14 @@ class ClientThread(threading.Thread) :
 			
 			answer_str = json.dumps(answer)
 			self.csocket.send(answer_str.encode('utf-8'))	
-			#airport_one = flightInfo()
-
-			"""
-			count = 0
-			while True:
-				time.sleep(1)
-				#print("Id is " + str(self.id))
-				
-				print(data)
-				count += 1
-				if (count == 5):
-					self.csocket.close()
-					self.csocket = None
-					break
-			"""
 		else:
 			# to do 
-			print(" ")
+			date = question_dict.get('date')
+			carrier = question_dict.get('carrier')
+			flight = question_dict.get('flight')
+			print(date)
+			print(carrier)
+			print(flight)
 
 
 		
