@@ -97,7 +97,7 @@ class GUI(QMainWindow):
 		else:
 			return False
 
-	def recvAnsFromServer(self):
+	def recvAnsFromServer_flight_info(self):
 		print('Waiting answer from server..')
 		self.data_byte = self.server.recv(self.size)
 		self.data_str  = self.data_byte.decode("utf-8")
@@ -133,6 +133,14 @@ class GUI(QMainWindow):
 			self.widget.set_weather_info(weather_str)
 			self.widget.set_flight_info(self.flightInfo[0], self.flightInfo[1])
 
+	def recvAnsFromServer_flight_status(self):
+		print('Waiting answer from server..')
+		self.data_byte = self.server.recv(self.size)
+		self.data_str  = self.data_byte.decode("utf-8")
+		self.data_dict = json.loads(self.data_str)
+	'''
+		create flight searching payload, and send it to server
+	'''
 	@pyqtSlot()
 	def create_flight_search_payload(self):
 		name = self.widget.name_line_edit.text()
@@ -174,7 +182,7 @@ class GUI(QMainWindow):
 				print(payload)
 				#send question payload to server
 				self.sendMsgToServer(payload)
-				self.recvAnsFromServer()
+				self.recvAnsFromServer_flight_info()
 
 	@pyqtSlot()
 	def create_flight_status_payload(self):
@@ -192,11 +200,21 @@ class GUI(QMainWindow):
 		elif year == '' or month == '' or day == '':
 			self.widget.enter_date_flight_status()
 		else:
+			
 			check_date = self.isValidDate(date)
 			if check_date == False:
 				self.widget.show_invalid_flight_date_msg()
 			else:
 				self.widget.reset_flight_error_msg_label()
+				self.connectToServer()
+				payload = {
+					'carrier':	carrier, 	\
+					'flight': flight_num, 	\
+					'date':	date
+				}
+				self.sendMsgToServer(payload)
+
+
 		
 
 if __name__ == '__main__':

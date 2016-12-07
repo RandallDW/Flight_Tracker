@@ -5,6 +5,7 @@ import socket
 import _thread
 import requests
 import threading
+from FlightStatus import *
 #import RPi.GPIO as GPIO
 
 """
@@ -113,9 +114,9 @@ class FlightInfo(object):
 							departureTime = leg[n].get('departureTime')
 							arrivalTime	= leg[n].get('arrivalTime')	
 							
-							flight_str = flight_carrier + ' ' + str(flight_number)+ "\t\t" + origin + \
+							flight_str = flight_carrier + ' ' + str(flight_number)+ "\t" + origin + \
 											'\t' + destination + '\t' + departureTime + '\t' + arrivalTime \
-												+ '\t' + str(booking_code_count)  + '\t' + meal
+												+ '\t\t' + str(booking_code_count)  + '\t\t' + meal
 							flight_list.append(flight_str)
 				flightInfo[i] = flight_list
 			return [flightInfo, flightPrice]
@@ -175,6 +176,11 @@ class ClientThread(threading.Thread) :
 			date = question_dict.get('date')
 			carrier = question_dict.get('carrier')
 			flight = question_dict.get('flight')
+
+			status = FlightStatus(carrier, flight, date)
+			status_data = status.getInfo()
+
+
 			print(date)
 			print(carrier)
 			print(flight)

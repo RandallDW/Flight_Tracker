@@ -13,7 +13,7 @@ class MainWidget(QTabWidget):
 	submit = pyqtSignal()
 	def __init__(self, parent = None):
 		super(MainWidget, self).__init__(parent) 
-		self.setGeometry(100,100,1200,800)
+		self.setGeometry(100,100,1200,1100)
 		self.tab1 = QWidget()
 		self.tab2 = QWidget()
 		self.tab3 = QWidget()
@@ -220,7 +220,7 @@ class MainWidget(QTabWidget):
 		self.flight_err_msg.setStyleSheet('color: red')
 
 	def reset_flight_error_msg_label(self):
-		self.flight_err_msg.setText('')
+		self.flight_err_msg.setText(None) 
 
 	def enter_carrier(self):
 		self.flight_err_msg.setText('Error: Please enter flight carrier')
@@ -247,6 +247,6 @@ class MainWidget(QTabWidget):
 		for i in range (0, len(flight)):
 			if flight[i] != None:
 				self.solution_text_edit.append("\t Solution# %d: Sale Price: %s" % (i + 1, price[i]) )
-				self.solution_text_edit.append("\t\tOrigin\tDestination\tDepartureTime\tArrivalTime\t\tAvailable Seat\t\tMeal")
+				self.solution_text_edit.append("\t\tFlight\tOrigin\tDestination\tDepartureTime\tArrivalTime\t\t\tAvailable Seat\tMeal")
 				for j in range (0, len(flight[i])):
 					self.solution_text_edit.append("\t\t" + (flight[i])[j])
