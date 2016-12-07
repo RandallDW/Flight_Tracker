@@ -31,7 +31,7 @@ class GUI(QMainWindow):
 		self.server = None
 		
 		self.widget.submit_button.clicked.connect(self.create_flight_search_payload)
-		self.widget.flight_submit.clicked.connect(self.create_flight_status_payload)
+		self.widget.flight_submit_button.clicked.connect(self.create_flight_status_payload)
 
 	'''
 		connect to server
@@ -158,40 +158,45 @@ class GUI(QMainWindow):
 				self.widget.show_invalid_date_msg()
 			else:
 				self.widget.reset_error_msg_label()
-			location = self.getLocationCoord(name)
-			nearest = NearestAirport(location[0], location[1])
-			nearest.findAirport()
 
-			payload = {
-				'first':  nearest.airport_one_code, \
-				'second': nearest.airport_two_code, \
-				'third':  nearest.airport_three_code, \
-				'destination' : destination, \
-				'date':	  date, \
-				'Flight Status': False
-			}
-			print(payload)
-			#send question payload to server
-			self.sendMsgToServer(payload)
-			self.recvAnsFromServer()
+				location = self.getLocationCoord(name)
+				nearest = NearestAirport(location[0], location[1])
+				nearest.findAirport()
+
+				payload = {
+					'first':  nearest.airport_one_code, \
+					'second': nearest.airport_two_code, \
+					'third':  nearest.airport_three_code, \
+					'destination' : destination, \
+					'date':	  date, \
+					'Flight Status': False
+				}
+				print(payload)
+				#send question payload to server
+				self.sendMsgToServer(payload)
+				self.recvAnsFromServer()
 
 	@pyqtSlot()
 	def create_flight_status_payload(self):
-		carrier = self.widget.name_line_edit.text()
-		flight_num = self.widget.dest_line_edit.text()
-		year = self.widget.year_line_edit.text()
-		month = self.widget.month_line_edit.text()
-		day = self.widget.day_line_edit.text()
+		carrier = self.widget.carrier_line_edit.text()
+		flight_num = self.widget.flight_line_edit.text()
+		year = self.widget.flight_year_line_edit.text()
+		month = self.widget.flight_month_line_edit.text()
+		day = self.widget.flight_day_line_edit.text()
 		date = year + '-' + month + '-' + day
 		
 		if carrier == '':
-			self.widget.enter_address()
+			self.widget.enter_carrier()
 		elif flight_num == '':
-			self.widget.enter_airport_code()
+			self.widget.enter_flight_num()
 		elif year == '' or month == '' or day == '':
-			self.widget.enter_date()
+			self.widget.enter_date_flight_status()
 		else:
-
+			check_date = self.isValidDate(date)
+			if check_date == False:
+				self.widget.show_invalid_flight_date_msg()
+			else:
+				self.widget.reset_flight_error_msg_label()
 		
 
 if __name__ == '__main__':
