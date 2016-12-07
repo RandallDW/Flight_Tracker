@@ -84,7 +84,7 @@ class MainWidget(QTabWidget):
 		layout.addRow(self.err_msg)
 		
 		pic = QLabel(self.tab1)
-		pic.setGeometry(10, 10, 1200, 700)
+		pic.setGeometry(0, 0, 1200, 900)
 		#use full ABSOLUTE path to the image, not relative
 		pic.setPixmap(QPixmap(os.getcwd() + "/flight.jpg"))
 	
@@ -131,10 +131,55 @@ class MainWidget(QTabWidget):
 		box_line_2 = QGridLayout()
 
 		# first layout box
-		name = QLabel("Current Address:")
-		dest_code = QLabel("Destination Airport Code:")
+		carrier = QLabel("Carrier:")
+		flight_num = QLabel("Flight:")
+		self.carrier_line_edit = QLineEdit()
+		self.flight_line_edit = QLineEdit()
+		
+		box_line_1.addWidget(carrier, 0, 0)
+		box_line_1.addWidget(flight_num, 1, 0)
+		box_line_1.addWidget(self.carrier_line_edit, 0, 1)
+		box_line_1.addWidget(self.flight_line_edit, 1, 1)
+		box_line_1.addWidget(QLabel("\t\t\t\t\t\t\t\t"), 0, 2)
+		
+		# seconde layout box
+		date = QLabel("Date:")
+		self.flight_year_line_edit = QLineEdit()
+		self.flight_year_line_edit.setPlaceholderText("YYYY")
 
-		self.setTabText(3, "Flight Status")
+		self.flight_month_line_edit = QLineEdit()
+		self.flight_month_line_edit.setPlaceholderText("MM")
+
+		self.flight_day_line_edit = QLineEdit()
+		self.flight_day_line_edit.setPlaceholderText("DD")
+
+		box_line_2.addWidget(date, 0, 0)
+		box_line_2.addWidget(QLabel("\t\t"), 0, 1)
+		box_line_2.addWidget(self.flight_year_line_edit, 0, 2)
+		box_line_2.addWidget(QLabel("-"), 0, 3)
+		box_line_2.addWidget(self.flight_month_line_edit, 0, 4)
+		box_line_2.addWidget(QLabel("-"), 0, 5)
+		box_line_2.addWidget(self.flight_day_line_edit, 0, 6)
+		
+		self.flight_submit_button = QPushButton()
+		self.flight_submit_button.setText("Submit")
+		box_line_2.addWidget(self.flight_submit_button, 1, 6)
+
+		# self.invalid label
+		font = QFont()
+		font.setPointSize(20)
+		self.flight_err_msg = QLabel('')
+		self.flight_err_msg.setFont(font)
+
+
+		# add layout
+		layout.addRow(box_line_1)
+		layout.addRow(box_line_2)
+		layout.addRow(self.flight_err_msg)
+		
+		
+	
+		self.setTabText(0,"Flight searching")
 		self.tab4.setLayout(layout)
 
 
@@ -167,9 +212,36 @@ class MainWidget(QTabWidget):
 		self.err_msg.setText('Error: No flight available..')
 		self.err_msg.setStyleSheet('color: red')
 
+	'''
+	flight status error msg
+	'''
+	def show_invalid_flight_date_msg(self):
+		self.flight_err_msg.setText('Error: Invalid date..')
+		self.flight_err_msg.setStyleSheet('color: red')
+
+	def reset_flight_error_msg_label(self):
+		self.flight_err_msg.setText('')
+
+	def enter_carrier(self):
+		self.flight_err_msg.setText('Error: Please enter flight carrier')
+		self.flight_err_msg.setStyleSheet('color: red')
+
+	def enter_flight_num(self):
+		self.flight_err_msg.setText('Error: Please enter flight number')
+		self.flight_err_msg.setStyleSheet('color: red')
+	def enter_date_flight_status(self):
+		self.flight_err_msg.setText('Error: Please enter date')
+		self.flight_err_msg.setStyleSheet('color: red')
+	
+	'''
+	set weather info
+	'''
 	def set_weather_info(self, msg):
 		self.weather_text_edit.setText(msg)
 
+	'''
+	set soluitons
+	'''
 	def set_flight_info(self, flight, price):
 		self.solution_text_edit.setText("Flight Info:")
 		for i in range (0, len(flight)):
