@@ -37,6 +37,20 @@ class FlightStatus(object):
 			return error_dict
 		else:
 			appendix_dict = data_dict.get('appendix')
+
+			# airline information
+			flight_airlines = appendix_dict.get('airlines')
+			airlines = [None] * len(flight_airlines)
+			for i in range (0, len(flight_airlines)):
+				name = flight_airlines[i].get('name')
+				fs = flight_airlines[i].get('fs')
+				phone_number = flight_airlines[i].get('phoneNumber')
+				airlines[i] = [name, fs, phone_number]
+
+			#flight equipment
+			flight_equipment = appendix_dict.get('equipments')
+
+			#flight status
 			flightStatuses_list = data_dict.get('flightStatuses')
 			flight_status_abbr = flightStatuses_list[0].get('status')
 			
@@ -51,5 +65,37 @@ class FlightStatus(object):
 								  'U': 'Unknown'
 								  }
 			flight_status = flight_status_dict.get(flight_status_abbr)
-			print(flight_status)
-			return flightStatuses_list[0]
+			# flight id and number
+			flight_id = flightStatuses_list[0].get('flightId')
+			flight_num = self.carrier + ' ' + str(self.flight)
+			
+			# flight time	
+			operational_time = flightStatuses_list[0].get('operationalTimes')
+
+			# depart time
+			published_departure_dict = operational_time.get('publishedDeparture')
+			published_departure_local = published_departure_dict.get('dateLocal')
+			published_departure_utc = published_departure_dict.get('dateUtc')
+
+			# arrival time
+			published_arrival_dict = operational_time.get('publishedArrival')
+			published_arrival_local = published_arrival_dict.get('dateLocal')
+
+			# flight duration
+			flight_durations_dict = flightStatuses_list[0].get('flightDurations')
+			scheduled_block_time = flight_durations_dict.get('scheduledBlockMinutes')
+
+			# arrival terminal
+			airport_resources_dict = flightStatuses_list[0].get('airportResources')
+			arrival_terminal = airport_resources_dict.get('arrivalTerminal')
+
+			new_flight_status_dict = {'flightId' : flight_id, \
+									  'localDepartTime': published_departure_local, \
+									  'UtcDepartTime':   published_departure_utc, \
+									  'localArrivalTime': published_arrival_local, \
+									  'flightDurations': scheduled_block_time, \
+									  'arrivalTerminal': arrival_terminal, \
+									  'flightStatus': flight_status \
+									  }
+
+			return [airlines, flight_equipment, new_flight_status_dict]
