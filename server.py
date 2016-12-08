@@ -143,6 +143,7 @@ class ClientThread(threading.Thread) :
 		question_dict = json.loads(question_str)
 
 		flight_status = question_dict.get("Flight Status")
+		# flight searching 
 		if flight_status == False:
 			airports = [None] * 3
 
@@ -172,7 +173,7 @@ class ClientThread(threading.Thread) :
 			answer_str = json.dumps(answer)
 			self.csocket.send(answer_str.encode('utf-8'))	
 		else:
-			# to do 
+			# flight status searching
 			date = question_dict.get('date')
 			carrier = question_dict.get('carrier')
 			flight = question_dict.get('flight')
@@ -180,6 +181,7 @@ class ClientThread(threading.Thread) :
 			status = FlightStatus(carrier, flight, date)
 			status_data = status.getInfo()
 			
+			# error message 	
 			if type(status_data) is dict:
 				answer = {
 					'error' : status_data
@@ -187,6 +189,8 @@ class ClientThread(threading.Thread) :
 				answer_str = json.dumps(answer)
 				print(answer_str)
 				self.csocket.send(answer_str.encode('utf-8'))	
+
+			# correct flight status
 			else:
 				answer = {
 					'status': status_data
@@ -230,12 +234,14 @@ class Server(object):
 		self.openServer()
 		self.startListen()
 
+	# open server
 	def openServer(self):
 		port = 2000
 		size = 1024		
 		self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.server.bind((self.host, port))
 
+	# server start to listen
 	def startListen(self):
 		# LED thread
 		led = LEDThread()

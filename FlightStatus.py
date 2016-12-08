@@ -33,7 +33,7 @@ class FlightStatus(object):
 				'errorCode': error_code, \
 				'errorMessage': error_message	\
 			}
-
+			# return type -> dict
 			return error_dict
 		else:
 			appendix_dict = data_dict.get('appendix')
@@ -97,5 +97,5 @@ class FlightStatus(object):
 									  'arrivalTerminal': arrival_terminal, \
 									  'flightStatus': flight_status \
 									  }
-
+			# return type -> list
 			return [airlines, flight_equipment, new_flight_status_dict]
