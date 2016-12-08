@@ -97,7 +97,10 @@ class GUI(QMainWindow):
 		else:
 			return False
 
-	def recvAnsFromServer_flight_info(self):
+	'''
+		recv answer payload from server, deserialize it
+	'''
+	def recvAnsFromServerFlightInfo(self):
 		print('Waiting answer from server..')
 		self.data_byte = self.server.recv(self.size)
 		self.data_str  = self.data_byte.decode("utf-8")
@@ -133,6 +136,7 @@ class GUI(QMainWindow):
 			self.widget.set_weather_info(weather_str)
 			self.widget.set_flight_info(self.flightInfo[0], self.flightInfo[1])
 
+	def
 	def recvAnsFromServer_flight_status(self):
 		print('Waiting answer from server..')
 		self.data_byte = self.server.recv(self.size)
@@ -182,8 +186,10 @@ class GUI(QMainWindow):
 				print(payload)
 				#send question payload to server
 				self.sendMsgToServer(payload)
-				self.recvAnsFromServer_flight_info()
-
+				self.recvAnsFromServerFlightInfo()
+	'''
+	create flight status quest payload, and send it to server
+	'''			
 	@pyqtSlot()
 	def create_flight_status_payload(self):
 		carrier = self.widget.carrier_line_edit.text()
@@ -213,6 +219,7 @@ class GUI(QMainWindow):
 					'date':	date
 				}
 				self.sendMsgToServer(payload)
+
 
 
 		
