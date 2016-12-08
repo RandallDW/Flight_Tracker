@@ -136,7 +136,7 @@ class GUI(QMainWindow):
 			self.widget.set_weather_info(weather_str)
 			self.widget.set_flight_info(self.flightInfo[0], self.flightInfo[1])
 
-	def
+	
 	def recvAnsFromServer_flight_status(self):
 		print('Waiting answer from server..')
 		self.data_byte = self.server.recv(self.size)
