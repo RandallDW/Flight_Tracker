@@ -180,10 +180,24 @@ class ClientThread(threading.Thread) :
 			status = FlightStatus(carrier, flight, date)
 			status_data = status.getInfo()
 
+			print(type(status_data))
+			#status_data_dict = json.loads(status_data)
+			error = status_data.get('errorCode')
+			if error != None:
+				answer = {
+					'error' : status_data
+				}
+				answer_str = json.dumps(answer)
+				print(answer_str)
+				self.csocket.send(answer_str.encode('utf-8'))	
+			else:
+				answer = {
+					'status': status_data
+				}
+				print(status_data)
+				answer_str = json.dumps(answer)
+				self.csocket.send(answer_str.encode('utf-8'))	
 
-			print(date)
-			print(carrier)
-			print(flight)
 
 
 		
