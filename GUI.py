@@ -139,9 +139,10 @@ class GUI(QMainWindow):
 	
 	def recvAnsFromServer_flight_status(self):
 		print('Waiting answer from server..')
-		self.data_byte = self.server.recv(self.size)
-		self.data_str  = self.data_byte.decode("utf-8")
-		self.data_dict = json.loads(self.data_str)
+		self.flight_data_byte = self.server.recv(self.size)
+		self.flight_data_str  = self.flight_data_byte.decode("utf-8")
+		print(self.flight_data_str)
+		self.flight_data_dict = json.loads(self.flight_data_str)
 	'''
 		create flight searching payload, and send it to server
 	'''
@@ -206,10 +207,12 @@ class GUI(QMainWindow):
 		elif year == '' or month == '' or day == '':
 			self.widget.enter_date_flight_status()
 		else:
-			
 			check_date = self.isValidDate(date)
+			# invalid date
 			if check_date == False:
 				self.widget.show_invalid_flight_date_msg()
+
+			# valid date, sending correct message to server
 			else:
 				self.widget.reset_flight_error_msg_label()
 				self.connectToServer()
@@ -219,6 +222,7 @@ class GUI(QMainWindow):
 					'date':	date
 				}
 				self.sendMsgToServer(payload)
+				self.recvAnsFromServer_flight_status()
 
 
 
