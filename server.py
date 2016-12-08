@@ -179,11 +179,8 @@ class ClientThread(threading.Thread) :
 
 			status = FlightStatus(carrier, flight, date)
 			status_data = status.getInfo()
-
-			print(type(status_data))
-			#status_data_dict = json.loads(status_data)
-			error = status_data.get('errorCode')
-			if error != None:
+			
+			if type(status_data) is dict:
 				answer = {
 					'error' : status_data
 				}
