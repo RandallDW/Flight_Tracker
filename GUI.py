@@ -10,7 +10,7 @@ from struct import*
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from mainWidget import*
+from mainWidget import MainWidget
 from nearestAirport import NearestAirport
 from geopy.geocoders import Nominatim
 
@@ -146,10 +146,23 @@ class GUI(QMainWindow):
 
 		error = self.flight_data_dict.get('error')
 		if error != None:
-			print('No error')
+			self.widget.set_flight_status_error(error)
 		else:
 			status = self.flight_data_dict.get('status')
 			self.widget.set_flight_status_info(status)
+			departure_time = status[2].get('UtcDepartTime')
+			departure_time_list = self.date_time(departure_time)
+			self.widget.departure_time(departure_time_list)
+
+
+	def date_time(self, dateTime):
+		year = int(dateTime[0:4])
+		month = int(dateTime[5:7])
+		day = int(dateTime[8:10])
+		hour = int(dateTime[11:13])
+		minute = int(dateTime[14:16])
+		second = int(dateTime[17:19])
+		return [year, month, day, hour, minute, second]
 			
 	'''
 		create flight searching payload, and send it to server

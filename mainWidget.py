@@ -8,6 +8,7 @@ from struct import*
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+from datetime import datetime, timedelta
 
 class MainWidget(QTabWidget):
 	submit = pyqtSignal()
@@ -320,7 +321,30 @@ class MainWidget(QTabWidget):
 
 
 
+	def set_flight_status_error(self, error):
+		self.flight_status_text_edit.setStyleSheet("QTextEdit {color:red}")
+		self.flight_status_text_edit.setText('Error:')
 
+		err_msg = error.get('errorMessage')
+		err_code = error.get('errorCode')
+
+		self.flight_status_text_edit.append('\tError Code')
+		self.flight_status_text_edit.append('\t\t\t' + err_code)
+		self.flight_status_text_edit.append('\tError Message')
+		self.flight_status_text_edit.append('\t\t\t' + err_msg)
+
+
+	def departure_time(self, departure_time_list):
+		depart_date_time = datetime(departure_time_list[0], departure_time_list[1], departure_time_list[2], \
+			departure_time_list[3], departure_time_list[4], departure_time_list[5])
+		duration_hour = int((depart_date_time - datetime.utcnow()).total_seconds() / 3600)
+		duration_minute =  int((depart_date_time - datetime.utcnow()).total_seconds() % 3600 / 60)
+		duration_second = int((depart_date_time - datetime.utcnow()).total_seconds() % 3600 % 60)
+
+		print(depart_date_time - datetime.utcnow())
+		print(str(duration_hour) + ':' + str(duration_minute) + ':' + str(duration_second))
+
+	
 
 
 		
