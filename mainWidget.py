@@ -133,6 +133,7 @@ class MainWidget(QTabWidget):
 		box_line_1 = QGridLayout()
 		box_line_2 = QGridLayout()
 		box_line_3 = QGridLayout()
+		box_line_4 = QGridLayout()
 
 		# first layout box
 		carrier = QLabel("Carrier:")
@@ -186,9 +187,22 @@ class MainWidget(QTabWidget):
 		layout.addRow(box_line_2)
 		layout.addRow(self.flight_err_msg)
 
+		font = QFont()
+		font.setPointSize(20)
+		font.setBold(True)
+		self.remaining_time_label = QLabel('Time remaining to departure:')
+		self.remaining_time_label.setFont(font)
+
+		self.remaining_time = QLabel(' ')
+		self.remaining_time.setFont(font)
+		box_line_4.addWidget(self.remaining_time_label, 0, 0)
+		box_line_4.addWidget(self.remaining_time, 0, 1)
+
 		box_line_3.addLayout(layout,0, 0)
 		box_line_3.addWidget(self.flight_status_text_edit, 1, 0)
+		box_line_3.addLayout(box_line_4,2, 0)
 
+		
 		
 		
 	
@@ -256,13 +270,13 @@ class MainWidget(QTabWidget):
 	set soluitons
 	'''
 	def set_flight_info(self, flight, price):
-		self.solution_text_edit.setText("Flight Info:")
+		self.solution_text_edit.setText(" ")
 		for i in range (0, len(flight)):
 			if flight[i] != None:
-				self.solution_text_edit.append("\t Solution# %d: Sale Price: %s" % (i + 1, price[i]) )
-				self.solution_text_edit.append("\t\tFlight\tOrigin\tDestination\tDepartureTime\tArrivalTime\t\t\tAvailable Seat\tMeal")
+				self.solution_text_edit.append("Solution# %d: Sale Price: %s" % (i + 1, price[i]) )
+				self.solution_text_edit.append("\tFlight\tOrigin\tDestination\tDepartureTime\tArrivalTime\t\t\tAvailable Seat\tMeal")
 				for j in range (0, len(flight[i])):
-					self.solution_text_edit.append("\t\t" + (flight[i])[j])
+					self.solution_text_edit.append("\t" + (flight[i])[j])
 
 	'''
 	set flight status info
@@ -344,7 +358,7 @@ class MainWidget(QTabWidget):
 		print(depart_date_time - datetime.utcnow())
 		print(str(duration_hour) + ':' + str(duration_minute) + ':' + str(duration_second))
 
-	
+		self.remaining_time.setText(str(duration_hour) + ':' + str(duration_minute) + ':' + str(duration_second))
 
 
 		
