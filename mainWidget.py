@@ -35,6 +35,7 @@ class MainWidget(QTabWidget):
 		box_line_1 = QGridLayout()
 		box_line_2 = QGridLayout()
 
+
 		# first layout box
 		name = QLabel("Current Address:")
 		dest_code = QLabel("Destination Airport Code:")
@@ -126,9 +127,11 @@ class MainWidget(QTabWidget):
 		self.tab3.setLayout(layout)
 
 	def tab4UI(self):
+
 		layout = QFormLayout()
 		box_line_1 = QGridLayout()
 		box_line_2 = QGridLayout()
+		box_line_3 = QGridLayout()
 
 		# first layout box
 		carrier = QLabel("Carrier:")
@@ -171,16 +174,25 @@ class MainWidget(QTabWidget):
 		self.flight_err_msg = QLabel('')
 		self.flight_err_msg.setFont(font)
 
+		#
+		self.flight_status_text_edit  = QTextEdit()
+		self.flight_status_text_edit.setReadOnly(True)
+		
+
 
 		# add layout
 		layout.addRow(box_line_1)
 		layout.addRow(box_line_2)
 		layout.addRow(self.flight_err_msg)
+
+		box_line_3.addLayout(layout,0, 0)
+		box_line_3.addWidget(self.flight_status_text_edit, 1, 0)
+
 		
 		
 	
 		self.setTabText(0,"Flight searching")
-		self.tab4.setLayout(layout)
+		self.tab4.setLayout(box_line_3)
 
 
 	'''
@@ -250,3 +262,65 @@ class MainWidget(QTabWidget):
 				self.solution_text_edit.append("\t\tFlight\tOrigin\tDestination\tDepartureTime\tArrivalTime\t\t\tAvailable Seat\tMeal")
 				for j in range (0, len(flight[i])):
 					self.solution_text_edit.append("\t\t" + (flight[i])[j])
+
+	'''
+	set flight status info
+	'''
+	def set_flight_status_info(self, flight_info):
+		self.flight_status_text_edit.setStyleSheet("QTextEdit {color:black}")
+		self.flight_status_text_edit.setText('Flight Status:')
+
+		flight_status = flight_info[2]
+		flight_id = flight_status.get('flightId')
+		departure_airport_code = flight_status.get('departure_airport_code')
+		arrival_airport_code = flight_status.get('arrival_airport_code')
+		localDepartTime = flight_status.get('localDepartTime')
+		localArrivalTime = flight_status.get('localArrivalTime')
+		flightDurations = flight_status.get('flightDurations')
+		arrivalTerminal = flight_status.get('arrivalTerminal')
+		flightStatus = flight_status.get('flightStatus')
+
+		self.flight_status_text_edit.append('\tFlight ID:\t\t' + str(flight_id))
+		self.flight_status_text_edit.append('\tDesparture Airport Code:\t' + departure_airport_code)
+		self.flight_status_text_edit.append('\tArrival Airport Code:\t' + arrival_airport_code)
+		self.flight_status_text_edit.append('\tFlight Status:\t' + flightStatus)
+		self.flight_status_text_edit.append('\tArrival Terminal:\t' + arrivalTerminal)
+		self.flight_status_text_edit.append('\tLocal Departure Time:\t' + localDepartTime)
+		self.flight_status_text_edit.append('\tLocal Arrival Time:\t' + localArrivalTime)
+		self.flight_status_text_edit.append('\tFlight Durations:\t' + str(flightDurations) + " mintues")
+
+		lines = flight_info[0]
+		self.flight_status_text_edit.append('Airline:')
+		for i in range (0, len(lines)):
+			airline = lines[i]
+			self.flight_status_text_edit.append('\tAirline #' + str(i + 1))
+			self.flight_status_text_edit.append('\t\tName:\t\t' + airline[0])
+			self.flight_status_text_edit.append('\t\tFS: \t\t' + airline[1])
+			if airline[2] != None:
+				self.flight_status_text_edit.append('\t\tPhone Number:\t' + airline[2])
+			else:
+				self.flight_status_text_edit.append('\t\tPhone Number:\t-')
+
+		self.flight_status_text_edit.append('Flight Equipments:')
+		equipment = flight_info[1]
+		for i in range (0, len(equipment)):
+			equip = equipment[i]
+			name = equip.get('name')
+			turboProp = equip.get('turboProp')
+			jet = equip.get('jet')
+			widebody = equip.get('widebody')
+			regional = equip.get('regional')
+
+			self.flight_status_text_edit.append('\tEquipment #' + str(i + 1))
+			self.flight_status_text_edit.append('\t\tName: \t\t' + name)
+			self.flight_status_text_edit.append('\t\tRurboProp: \t\t' + str(turboProp))
+			self.flight_status_text_edit.append('\t\tJet:\t\t' + str(jet))
+			self.flight_status_text_edit.append('\t\tWidebody\t\t' + str(widebody))
+			self.flight_status_text_edit.append('\t\tRegional\t\t' + str(regional))
+
+
+
+
+
+
+		
