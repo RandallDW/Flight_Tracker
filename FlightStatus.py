@@ -89,13 +89,18 @@ class FlightStatus(object):
 			airport_resources_dict = flightStatuses_list[0].get('airportResources')
 			arrival_terminal = airport_resources_dict.get('arrivalTerminal')
 
+			departure_airport_code = flightStatuses_list[0].get('departureAirportFsCode')
+			arrival_airport_code = flightStatuses_list[0].get('arrivalAirportFsCode')
+
 			new_flight_status_dict = {'flightId' : flight_id, \
 									  'localDepartTime': published_departure_local, \
 									  'UtcDepartTime':   published_departure_utc, \
 									  'localArrivalTime': published_arrival_local, \
 									  'flightDurations': scheduled_block_time, \
 									  'arrivalTerminal': arrival_terminal, \
-									  'flightStatus': flight_status \
+									  'flightStatus': flight_status, \
+									  'departure_airport_code': departure_airport_code, \
+									  'arrival_airport_code': arrival_airport_code 
 									  }
 			# return type -> list
 			return [airlines, flight_equipment, new_flight_status_dict]
