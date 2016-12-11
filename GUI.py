@@ -131,7 +131,7 @@ class GUI(QMainWindow):
 							("\t Main:	\t\t" + weather_info_weather_main + '\n') + \
 							 ("\t Description: \t\t" + weather_info_weather_desc + '\n') + \
 							  ("\t Temperature: \t\t" + str(weather_info_main_temp_fahrenheit) + \
-							  	" (Fahrenheit)\n") + ("\t Humidity: \t\t\t" + str(weather_info_main_temp_humidity) + '\n')
+								" (Fahrenheit)\n") + ("\t Humidity: \t\t\t" + str(weather_info_main_temp_humidity) + '\n')
 
 			self.widget.set_weather_info(weather_str)
 			self.widget.set_flight_info(self.flightInfo[0], self.flightInfo[1])
@@ -143,6 +143,14 @@ class GUI(QMainWindow):
 		self.flight_data_str  = self.flight_data_byte.decode("utf-8")
 		print(self.flight_data_str)
 		self.flight_data_dict = json.loads(self.flight_data_str)
+
+		error = self.flight_data_dict.get('error')
+		if error != None:
+			print('No error')
+		else:
+			status = self.flight_data_dict.get('status')
+			self.widget.set_flight_status_info(status)
+			
 	'''
 		create flight searching payload, and send it to server
 	'''
