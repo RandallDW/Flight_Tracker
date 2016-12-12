@@ -372,9 +372,5 @@ if __name__ == "__main__":
 	global solution_num
 	solution_num = 10
 	a_lock = _thread.allocate_lock()
-<<<<<<< HEAD
-	host = '172.31.232.43'
-=======
 	host = '172.31.140.104'
->>>>>>> 193bfcbfb89cb517c948a1eb4b58e271fc87581a
 	server = Server(host)
