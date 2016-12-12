@@ -15,7 +15,7 @@ class MainWidget(QTabWidget):
 	submit = pyqtSignal()
 	def __init__(self, parent = None):
 		super(MainWidget, self).__init__(parent) 
-		self.setGeometry(100,100,1200,1100)
+		self.setGeometry(100,100,1200,700)
 		self.tab1 = QWidget()
 		self.tab2 = QWidget()
 		self.tab3 = QWidget()
