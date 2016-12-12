@@ -148,9 +148,10 @@ class GUI(QMainWindow):
 		else:
 			status = self.flight_data_dict.get('status')
 			self.widget.set_flight_status_info(status)
-			departure_time = status[2].get('UtcDepartTime')
-			departure_time_list = self.date_time(departure_time)
-			self.widget.departure_time(departure_time_list)
+			if status[2] != None:
+				departure_time = status[2].get('UtcDepartTime')
+				departure_time_list = self.date_time(departure_time)
+				self.widget.departure_time(departure_time_list)
 
 
 	def date_time(self, dateTime):

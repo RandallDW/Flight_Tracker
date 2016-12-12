@@ -289,23 +289,29 @@ class MainWidget(QTabWidget):
 		self.flight_status_text_edit.setText('Flight Status:')
 
 		flight_status = flight_info[2]
-		flight_id = flight_status.get('flightId')
-		departure_airport_code = flight_status.get('departure_airport_code')
-		arrival_airport_code = flight_status.get('arrival_airport_code')
-		localDepartTime = flight_status.get('localDepartTime')
-		localArrivalTime = flight_status.get('localArrivalTime')
-		flightDurations = flight_status.get('flightDurations')
-		arrivalTerminal = flight_status.get('arrivalTerminal')
-		flightStatus = flight_status.get('flightStatus')
+		if flight_status != None:
+			flight_id = flight_status.get('flightId')
+			departure_airport_code = flight_status.get('departure_airport_code')
+			arrival_airport_code = flight_status.get('arrival_airport_code')
+			localDepartTime = flight_status.get('localDepartTime')
+			localArrivalTime = flight_status.get('localArrivalTime')
+			flightDurations = flight_status.get('flightDurations')
+			arrivalTerminal = flight_status.get('arrivalTerminal')
+			flightStatus = flight_status.get('flightStatus')
 
-		self.flight_status_text_edit.append('\tFlight ID:\t\t' + str(flight_id))
-		self.flight_status_text_edit.append('\tDesparture Airport Code:\t' + departure_airport_code)
-		self.flight_status_text_edit.append('\tArrival Airport Code:\t' + arrival_airport_code)
-		self.flight_status_text_edit.append('\tFlight Status:\t' + flightStatus)
-		self.flight_status_text_edit.append('\tArrival Terminal:\t' + arrivalTerminal)
-		self.flight_status_text_edit.append('\tLocal Departure Time:\t' + localDepartTime)
-		self.flight_status_text_edit.append('\tLocal Arrival Time:\t' + localArrivalTime)
-		self.flight_status_text_edit.append('\tFlight Durations:\t' + str(flightDurations) + " mintues")
+			self.flight_status_text_edit.append('\tFlight ID:\t\t' + str(flight_id))
+			self.flight_status_text_edit.append('\tDesparture Airport Code:\t' + departure_airport_code)
+			self.flight_status_text_edit.append('\tArrival Airport Code:\t' + arrival_airport_code)
+			self.flight_status_text_edit.append('\tFlight Status:\t' + flightStatus)
+			if arrivalTerminal != None:
+				self.flight_status_text_edit.append('\tArrival Terminal:\t' + arrivalTerminal)
+			else:
+				self.flight_status_text_edit.append('\tArrival Terminal:\t-')
+			self.flight_status_text_edit.append('\tLocal Departure Time:\t' + localDepartTime)
+			self.flight_status_text_edit.append('\tLocal Arrival Time:\t' + localArrivalTime)
+			self.flight_status_text_edit.append('\tFlight Durations:\t' + str(flightDurations) + " mintues")
+		else:
+			self.flight_status_text_edit.append('\t-')
 
 		lines = flight_info[0]
 		self.flight_status_text_edit.append('Airline:')
@@ -321,20 +327,23 @@ class MainWidget(QTabWidget):
 
 		self.flight_status_text_edit.append('Flight Equipments:')
 		equipment = flight_info[1]
-		for i in range (0, len(equipment)):
-			equip = equipment[i]
-			name = equip.get('name')
-			turboProp = equip.get('turboProp')
-			jet = equip.get('jet')
-			widebody = equip.get('widebody')
-			regional = equip.get('regional')
+		if equipment != None:
+			for i in range (0, len(equipment)):
+				equip = equipment[i]
+				name = equip.get('name')
+				turboProp = equip.get('turboProp')
+				jet = equip.get('jet')
+				widebody = equip.get('widebody')
+				regional = equip.get('regional')
 
-			self.flight_status_text_edit.append('\tEquipment #' + str(i + 1))
-			self.flight_status_text_edit.append('\t\tName: \t\t' + name)
-			self.flight_status_text_edit.append('\t\tRurboProp: \t\t' + str(turboProp))
-			self.flight_status_text_edit.append('\t\tJet:\t\t' + str(jet))
-			self.flight_status_text_edit.append('\t\tWidebody\t\t' + str(widebody))
-			self.flight_status_text_edit.append('\t\tRegional\t\t' + str(regional))
+				self.flight_status_text_edit.append('\tEquipment #' + str(i + 1))
+				self.flight_status_text_edit.append('\t\tName: \t\t' + name)
+				self.flight_status_text_edit.append('\t\tRurboProp: \t\t' + str(turboProp))
+				self.flight_status_text_edit.append('\t\tJet:\t\t' + str(jet))
+				self.flight_status_text_edit.append('\t\tWidebody\t\t' + str(widebody))
+				self.flight_status_text_edit.append('\t\tRegional\t\t' + str(regional))
+		else:
+			self.flight_status_text_edit.append('\t-')
 
 
 
@@ -358,23 +367,19 @@ class MainWidget(QTabWidget):
 		self.duration_minute =  int((depart_date_time - datetime.utcnow()).total_seconds() % 3600 / 60)
 		self.duration_second = int((depart_date_time - datetime.utcnow()).total_seconds() % 3600 % 60)
 
-		print(depart_date_time - datetime.utcnow())
-		print(str(self.duration_hour) + ':' + str(self.duration_minute) + ':' + str(self.duration_second))
 		if self.thread == None:
 			self.thread = Timer(self.duration_hour, self.duration_minute, self.duration_second, self.remaining_time)
-			self.thread.daemon = True
 			self.thread.start()
 		else:
 			self.thread.stop()
 
 			self.thread = Timer(self.duration_hour, self.duration_minute, self.duration_second, self.remaining_time)
-			self.thread.daemon = True
 			self.thread.start()
 
-		#self.remaining_time.setText(str(duration_hour) + ':' + str(duration_minute) + ':' + str(duration_second))
 
-
-
+'''
+timer thread 
+'''
 class Timer(threading.Thread):
 	def __init__(self, hour, minute, second, remaining_time):
 		threading.Thread.__init__(self)
@@ -382,8 +387,14 @@ class Timer(threading.Thread):
 		self.minute = minute
 		self.second = second
 		self.remaining_time = remaining_time
+
 	def run(self):
-		print(str(self.hour) + ' ' + str(self.minute) +  ' ' + str(self.second))
+		if self.hour < 0:
+			self.hour = 0
+			self.minute = 0
+			self.second = 0
+			self.remaining_time.setText(str(self.hour) + ':' + str(self.minute) + ':' + str(self.second))
+		
 		while self.hour != 0 or self.minute != 0 or self.second != 0:
 			self.remaining_time.setText(str(self.hour) + ':' + str(self.minute) + ':' + str(self.second))
 			self.second -= 1
@@ -396,6 +407,7 @@ class Timer(threading.Thread):
 					if self.hour < 0:
 						break
 			time.sleep(1)
+
 	def stop(self):
 		self.hour = 0
 		self.minute = 0

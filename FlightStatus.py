@@ -52,55 +52,60 @@ class FlightStatus(object):
 
 			#flight status
 			flightStatuses_list = data_dict.get('flightStatuses')
-			flight_status_abbr = flightStatuses_list[0].get('status')
-			
-			flight_status_dict = {'S': 'Scheduled',	\
-								  'A': 'Active',	\
-								  'C': 'Canceled',	\
-								  'D': 'Diverted',	\
-								  'DN': 'Data source needed',	\
-								  'L': 'Landed',	\
-								  'NO': 'Not Operational', \
-								  'R': 'Redirected',	\
-								  'U': 'Unknown'
-								  }
-			flight_status = flight_status_dict.get(flight_status_abbr)
-			# flight id and number
-			flight_id = flightStatuses_list[0].get('flightId')
-			flight_num = self.carrier + ' ' + str(self.flight)
-			
-			# flight time	
-			operational_time = flightStatuses_list[0].get('operationalTimes')
+			if flightStatuses_list != None:
+				if len(flightStatuses_list) > 0:
+					flight_status_abbr = flightStatuses_list[0].get('status')
+					
+					flight_status_dict = {'S': 'Scheduled',	\
+										  'A': 'Active',	\
+										  'C': 'Canceled',	\
+										  'D': 'Diverted',	\
+										  'DN': 'Data source needed',	\
+										  'L': 'Landed',	\
+										  'NO': 'Not Operational', \
+										  'R': 'Redirected',	\
+										  'U': 'Unknown'
+										  }
+					flight_status = flight_status_dict.get(flight_status_abbr)
+					# flight id and number
+					flight_id = flightStatuses_list[0].get('flightId')
+					flight_num = self.carrier + ' ' + str(self.flight)
+					
+					# flight time	
+					operational_time = flightStatuses_list[0].get('operationalTimes')
 
-			# depart time
-			published_departure_dict = operational_time.get('publishedDeparture')
-			published_departure_local = published_departure_dict.get('dateLocal')
-			published_departure_utc = published_departure_dict.get('dateUtc')
+					# depart time
+					published_departure_dict = operational_time.get('publishedDeparture')
+					published_departure_local = published_departure_dict.get('dateLocal')
+					published_departure_utc = published_departure_dict.get('dateUtc')
 
-			# arrival time
-			published_arrival_dict = operational_time.get('publishedArrival')
-			published_arrival_local = published_arrival_dict.get('dateLocal')
+					# arrival time
+					published_arrival_dict = operational_time.get('publishedArrival')
+					published_arrival_local = published_arrival_dict.get('dateLocal')
 
-			# flight duration
-			flight_durations_dict = flightStatuses_list[0].get('flightDurations')
-			scheduled_block_time = flight_durations_dict.get('scheduledBlockMinutes')
+					# flight duration
+					flight_durations_dict = flightStatuses_list[0].get('flightDurations')
+					scheduled_block_time = flight_durations_dict.get('scheduledBlockMinutes')
 
-			# arrival terminal
-			airport_resources_dict = flightStatuses_list[0].get('airportResources')
-			arrival_terminal = airport_resources_dict.get('arrivalTerminal')
+					# arrival terminal
+					airport_resources_dict = flightStatuses_list[0].get('airportResources')
+					arrival_terminal = airport_resources_dict.get('arrivalTerminal')
 
-			departure_airport_code = flightStatuses_list[0].get('departureAirportFsCode')
-			arrival_airport_code = flightStatuses_list[0].get('arrivalAirportFsCode')
+					departure_airport_code = flightStatuses_list[0].get('departureAirportFsCode')
+					arrival_airport_code = flightStatuses_list[0].get('arrivalAirportFsCode')
 
-			new_flight_status_dict = {'flightId' : flight_id, \
-									  'localDepartTime': published_departure_local, \
-									  'UtcDepartTime':   published_departure_utc, \
-									  'localArrivalTime': published_arrival_local, \
-									  'flightDurations': scheduled_block_time, \
-									  'arrivalTerminal': arrival_terminal, \
-									  'flightStatus': flight_status, \
-									  'departure_airport_code': departure_airport_code, \
-									  'arrival_airport_code': arrival_airport_code 
-									  }
+					new_flight_status_dict = {'flightId' : flight_id, \
+											  'localDepartTime': published_departure_local, \
+											  'UtcDepartTime':   published_departure_utc, \
+											  'localArrivalTime': published_arrival_local, \
+											  'flightDurations': scheduled_block_time, \
+											  'arrivalTerminal': arrival_terminal, \
+											  'flightStatus': flight_status, \
+											  'departure_airport_code': departure_airport_code, \
+											  'arrival_airport_code': arrival_airport_code 
+											  }
+					return [airlines, flight_equipment, new_flight_status_dict]
+				
 			# return type -> list
-			return [airlines, flight_equipment, new_flight_status_dict]
+			return [airlines, flight_equipment, None]
+			
