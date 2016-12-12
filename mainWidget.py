@@ -2,6 +2,7 @@ import sys, os
 import socket
 import time
 import _thread
+import threading
 import json
 from ctypes import*
 from struct import*
@@ -19,6 +20,7 @@ class MainWidget(QTabWidget):
 		self.tab2 = QWidget()
 		self.tab3 = QWidget()
 		self.tab4 = QWidget()
+		self.thread = None
 
 		self.addTab(self.tab1, "Search")
 		self.addTab(self.tab2, "Destination Weather")
@@ -30,6 +32,7 @@ class MainWidget(QTabWidget):
 		self.tab4UI()
 		self.setWindowTitle("Network Application Design")
 		self.show()
+
 
 	def tab1UI(self):
 		layout = QFormLayout()
@@ -351,14 +354,49 @@ class MainWidget(QTabWidget):
 	def departure_time(self, departure_time_list):
 		depart_date_time = datetime(departure_time_list[0], departure_time_list[1], departure_time_list[2], \
 			departure_time_list[3], departure_time_list[4], departure_time_list[5])
-		duration_hour = int((depart_date_time - datetime.utcnow()).total_seconds() / 3600)
-		duration_minute =  int((depart_date_time - datetime.utcnow()).total_seconds() % 3600 / 60)
-		duration_second = int((depart_date_time - datetime.utcnow()).total_seconds() % 3600 % 60)
+		self.duration_hour = int((depart_date_time - datetime.utcnow()).total_seconds() / 3600)
+		self.duration_minute =  int((depart_date_time - datetime.utcnow()).total_seconds() % 3600 / 60)
+		self.duration_second = int((depart_date_time - datetime.utcnow()).total_seconds() % 3600 % 60)
 
 		print(depart_date_time - datetime.utcnow())
-		print(str(duration_hour) + ':' + str(duration_minute) + ':' + str(duration_second))
+		print(str(self.duration_hour) + ':' + str(self.duration_minute) + ':' + str(self.duration_second))
+		if self.thread == None:
+			self.thread = Timer(self.duration_hour, self.duration_minute, self.duration_second, self.remaining_time)
+			self.thread.daemon = True
+			self.thread.start()
+		else:
+			self.thread.stop()
 
-		self.remaining_time.setText(str(duration_hour) + ':' + str(duration_minute) + ':' + str(duration_second))
+			self.thread = Timer(self.duration_hour, self.duration_minute, self.duration_second, self.remaining_time)
+			self.thread.daemon = True
+			self.thread.start()
+
+		#self.remaining_time.setText(str(duration_hour) + ':' + str(duration_minute) + ':' + str(duration_second))
 
 
-		
+
+class Timer(threading.Thread):
+	def __init__(self, hour, minute, second, remaining_time):
+		threading.Thread.__init__(self)
+		self.hour = hour
+		self.minute = minute
+		self.second = second
+		self.remaining_time = remaining_time
+	def run(self):
+		print(str(self.hour) + ' ' + str(self.minute) +  ' ' + str(self.second))
+		while self.hour != 0 or self.minute != 0 or self.second != 0:
+			self.remaining_time.setText(str(self.hour) + ':' + str(self.minute) + ':' + str(self.second))
+			self.second -= 1
+			if self.second < 0:
+				self.minute -= 1
+				self.second = 59
+				if self.minute < 0:
+					self.hour -= 1
+					self.minute = 59
+					if self.hour < 0:
+						break
+			time.sleep(1)
+	def stop(self):
+		self.hour = 0
+		self.minute = 0
+		self.second = 0

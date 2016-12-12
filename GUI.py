@@ -110,7 +110,6 @@ class GUI(QMainWindow):
 
 		if self.flightInfo == None:
 			self.widget.enter_no_flight()
-			print('No flight available..')
 		else:
 			# print out weather information
 			
@@ -141,7 +140,6 @@ class GUI(QMainWindow):
 		print('Waiting answer from server..')
 		self.flight_data_byte = self.server.recv(self.size)
 		self.flight_data_str  = self.flight_data_byte.decode("utf-8")
-		print(self.flight_data_str)
 		self.flight_data_dict = json.loads(self.flight_data_str)
 
 		error = self.flight_data_dict.get('error')
@@ -245,6 +243,20 @@ class GUI(QMainWindow):
 				self.sendMsgToServer(payload)
 				self.recvAnsFromServer_flight_status()
 
+	def timer_thread():
+		self.client_1_location = Receive(self.server.client1, self.server.client2, "Rover 1")  
+		self.thread  = QThread() 
+		self.client_1_location.moveToThread(self.thread)
+		self.thread.started.connect(self.client_1_location.recving)
+		#self.client_1_location.receive.connect(self.widget.update_location_rover_1)
+		self.client_1_location.receive.connect(self.widget.update_rover_msg)
+		self.client_1_location.status.connect(self.widget.client_1_msg)
+		
+		self.client_1_location.graphic.connect(self.widget.graphic.graphic_location)
+
+		self.client_1_location.receive.connect(self.widget.update_milestone_received)
+		self.client_1_location.send.connect(self.widget.update_milestone_sent)
+		self.thread.start()
 
 
 		
