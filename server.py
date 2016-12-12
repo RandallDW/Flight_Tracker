@@ -46,7 +46,7 @@ class FlightInfo(object):
 		self.destination = destination
 		self.date = date
 	def getInfo(self):
-		api_key = "AIzaSyDfJi43GJLQjCOeyhCb4NKlaUfybycHcPQ"
+		api_key = "AIzaSyC8tq1gMz4t_MaTnYo3JIGbWZIbeXEVAA8"
 		url = "https://www.googleapis.com/qpxExpress/v1/trips/search?key=" + api_key
 		headers = {'content-type': 'application/json'}
 		params = {
@@ -171,7 +171,9 @@ class ClientThread(threading.Thread) :
 			answer = {"weather": weather_dict,"flight": trips_data}
 			
 			answer_str = json.dumps(answer)
-			self.csocket.send(answer_str.encode('utf-8'))	
+			length = len(answer_str.encode('utf-8'))
+			self.csocket.send(str(length).encode('utf-8'))
+			self.csocket.send(answer_str.encode('utf-8'))
 		else:
 			# flight status searching
 			date = question_dict.get('date')
@@ -237,8 +239,9 @@ class Server(object):
 	# open server
 	def openServer(self):
 		port = 2000
-		size = 1024		
+		size = 8192		
 		self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.server.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, size)
 		self.server.bind((self.host, port))
 
 	# server start to listen
@@ -267,5 +270,5 @@ if __name__ == "__main__":
 	global solution_num
 	solution_num = 20
 	a_lock = _thread.allocate_lock()
-	host = ''
+	host = '172.31.232.43'
 	server = Server(host)
