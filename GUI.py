@@ -103,6 +103,7 @@ class GUI(QMainWindow):
 	def recvAnsFromServerFlightInfo(self):
 		print('Waiting answer from server..')
 		self.data_byte = self.server.recv(self.size)
+		print(self.data_byte)
 		self.data_str  = self.data_byte.decode("utf-8")
 		self.data_dict = json.loads(self.data_str)
 		self.weather   = self.data_dict.get("weather")
@@ -251,5 +252,5 @@ class GUI(QMainWindow):
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
-	gui = GUI('localhost')
+	gui = GUI('')
 	sys.exit(app.exec_())
