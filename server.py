@@ -6,7 +6,7 @@ import _thread
 import requests
 import threading
 from FlightStatus import *
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
 """
 global
@@ -212,7 +212,30 @@ class LEDThread(threading.Thread):
 		threading.Thread.__init__(self)
 		self.num = 0;
 	#	self.num (int): client number
+	
+		GPIO.setmode(GPIO.BCM)
+		GPIO.setup(17, GPIO.OUT)
+		GPIO.setup(27, GPIO.OUT)
+		GPIO.setup(22, GPIO.OUT)
+
+		GPIO.setup(5, GPIO.OUT)
+		GPIO.setup(6, GPIO.OUT)
+		GPIO.setup(13, GPIO.OUT)
+		GPIO.setup(19, GPIO.OUT)
+		
+
 	def run(self):
+
+		GPIO.output(17,True)
+		GPIO.output(27,True)
+		GPIO.output(22,True)
+
+		GPIO.output(5,True)
+		GPIO.output(6,True)
+		GPIO.output(13,True)
+		GPIO.output(19,True)
+		
+
 		while 1:
 			time.sleep(2)
 			self.num = threading.active_count() - 2
@@ -220,7 +243,86 @@ class LEDThread(threading.Thread):
 		
 			#print(Server.backlog)
 			#if (Server.client[0] == None):
-			#	print("NONE")
+			if self.num == 0:
+				GPIO.output(17, True)
+				GPIO.output(27, False)
+				GPIO.output(22, False)
+				GPIO.output(5, False)
+				GPIO.output(6, False)
+				GPIO.output(13, False)
+				GPIO.output(19, False)
+			elif self.num == 1:
+				GPIO.output(17, True)
+				GPIO.output(27, True)
+				GPIO.output(22, True)
+				GPIO.output(5, False)
+				GPIO.output(6, True)
+				GPIO.output(13, True)
+				GPIO.output(19, False)
+			elif self.num == 2:
+				GPIO.output(17, False)
+				GPIO.output(27, True)
+				GPIO.output(22, False)
+				GPIO.output(5, False)
+				GPIO.output(6, False)
+				GPIO.output(13, False)
+				GPIO.output(19, True)
+			elif self.num == 3:
+				GPIO.output(17, False)
+				GPIO.output(27, True)
+				GPIO.output(22, False)
+				GPIO.output(5, False)
+				GPIO.output(6, True)
+				GPIO.output(13, False)
+				GPIO.output(19, False)
+			elif self.num == 4:
+				GPIO.output(17, False)
+				GPIO.output(27, False)
+				GPIO.output(22, True)
+				GPIO.output(5, False)
+				GPIO.output(6, True)
+				GPIO.output(13, True)
+				GPIO.output(19, False)
+			elif self.num == 5:
+				GPIO.output(17, False)
+				GPIO.output(27, False)
+				GPIO.output(22, False)
+				GPIO.output(5, True)
+				GPIO.output(6, True)
+				GPIO.output(13, False)
+				GPIO.output(19, False)
+			elif self.num == 6:
+				GPIO.output(17, False)
+				GPIO.output(27, False)
+				GPIO.output(22, False)
+				GPIO.output(5, True)
+				GPIO.output(6, False)
+				GPIO.output(13, False)
+				GPIO.output(19, False)
+			elif self.num == 7:
+				GPIO.output(17, True)
+				GPIO.output(27, True)
+				GPIO.output(22, False)
+				GPIO.output(5, False)
+				GPIO.output(6, True)
+				GPIO.output(13, True)
+				GPIO.output(19, False)
+			elif self.num == 8:
+				GPIO.output(17, False)
+				GPIO.output(27, False)
+				GPIO.output(22, False)
+				GPIO.output(5, False)
+				GPIO.output(6, False)
+				GPIO.output(13, False)
+				GPIO.output(19, False)
+			elif self.num == 9:
+				GPIO.output(17, False)
+				GPIO.output(27, False)
+				GPIO.output(22, False)
+				GPIO.output(5, False)
+				GPIO.output(6, True)
+				GPIO.output(13, False)
+				GPIO.output(19, False)
 	#def count_1(self):
 
 """
@@ -268,7 +370,11 @@ class Server(object):
 """
 if __name__ == "__main__":
 	global solution_num
-	solution_num = 20
+	solution_num = 10
 	a_lock = _thread.allocate_lock()
+<<<<<<< HEAD
 	host = '172.31.232.43'
+=======
+	host = '172.31.140.104'
+>>>>>>> 193bfcbfb89cb517c948a1eb4b58e271fc87581a
 	server = Server(host)
