@@ -187,7 +187,7 @@ class ClientThread(threading.Thread) :
 					'error' : status_data
 				}
 				answer_str = json.dumps(answer)
-				print(answer_str)
+				#print(answer_str)
 				self.csocket.send(answer_str.encode('utf-8'))	
 
 			# correct flight status
@@ -195,7 +195,7 @@ class ClientThread(threading.Thread) :
 				answer = {
 					'status': status_data
 				}
-				print(status_data)
+				#print(status_data)
 				answer_str = json.dumps(answer)
 				self.csocket.send(answer_str.encode('utf-8'))	
 
