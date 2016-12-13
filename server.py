@@ -213,6 +213,7 @@ class LEDThread(threading.Thread):
 		self.num = 0;
 	#	self.num (int): client number
 	
+		GPIO.setwarnings(False)
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setup(17, GPIO.OUT)
 		GPIO.setup(27, GPIO.OUT)
@@ -222,7 +223,7 @@ class LEDThread(threading.Thread):
 		GPIO.setup(6, GPIO.OUT)
 		GPIO.setup(13, GPIO.OUT)
 		GPIO.setup(19, GPIO.OUT)
-		
+
 
 	def run(self):
 
@@ -372,5 +373,5 @@ if __name__ == "__main__":
 	global solution_num
 	solution_num = 10
 	a_lock = _thread.allocate_lock()
-	host = '172.31.140.104'
+	host = '172.31.156.29'
 	server = Server(host)
