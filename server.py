@@ -373,5 +373,5 @@ if __name__ == "__main__":
 	global solution_num
 	solution_num = 10
 	a_lock = _thread.allocate_lock()
-	host = '172.31.156.29'
+	host = '172.31.140.104'
 	server = Server(host)
