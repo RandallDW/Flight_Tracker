@@ -371,7 +371,7 @@ class Server(object):
 """
 if __name__ == "__main__":
 	global solution_num
-	solution_num = 10
+	solution_num = 20
 	a_lock = _thread.allocate_lock()
 	host = '172.31.156.29'
 	server = Server(host)
