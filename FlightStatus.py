@@ -89,7 +89,10 @@ class FlightStatus(object):
 
 					# arrival terminal
 					airport_resources_dict = flightStatuses_list[0].get('airportResources')
-					arrival_terminal = airport_resources_dict.get('arrivalTerminal')
+					if airport_resources_dict != None:
+						arrival_terminal = airport_resources_dict.get('arrivalTerminal')
+					else:
+						arrival_terminal = '-'
 
 					departure_airport_code = flightStatuses_list[0].get('departureAirportFsCode')
 					arrival_airport_code = flightStatuses_list[0].get('arrivalAirportFsCode')
