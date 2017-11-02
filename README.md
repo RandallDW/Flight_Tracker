@@ -17,14 +17,16 @@ I provided 2 version of server here, and made server is able to run without Pi.
 * Client
 	- need install PyQt5 package
 * NOTE:
-	- Project socker port: 8080 
+	- Project default socket port: 8080 
 	- Project server IP address: need to manually change to your current server machine's IP address
 	
 
 ## System Diagram & GUI Screen Shot
 
-![alt text](https://github.com/RandallDW/Flight_Tracker/blob/master/Screen_Shot.png "screen shot")
+System Diagram (Used two PI as examples)
 ![alt text](https://github.com/RandallDW/Flight_Tracker/blob/master/diagram.png "system diagram")
+Screen Shot
+![alt text](https://github.com/RandallDW/Flight_Tracker/blob/master/Screen_Shot.png "screen shot")
 
 ## APIs
 
