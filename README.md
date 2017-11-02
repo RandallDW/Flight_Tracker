@@ -23,9 +23,9 @@ I provided 2 version of server here, and made server is able to run without Pi.
 
 ## System Diagram & GUI Screen Shot
 
-System Diagram (Used two PI as examples)
+### System Diagram (Using two PI as examples)
 ![alt text](https://github.com/RandallDW/Flight_Tracker/blob/master/diagram.png "system diagram")
-Screen Shot
+### Screen Shot
 ![alt text](https://github.com/RandallDW/Flight_Tracker/blob/master/Screen_Shot.png "screen shot")
 
 ## APIs
