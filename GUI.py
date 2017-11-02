@@ -26,7 +26,7 @@ class GUI(QMainWindow):
 
 		#Connecting to server
 		self.host = host
-		self.port = 2000
+		self.port = 8000
 		self.size = 8192	
 		self.server = None
 		
@@ -253,5 +253,5 @@ class GUI(QMainWindow):
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
-	gui = GUI('172.31.140.104')
+	gui = GUI('127.0.0.1')
 	sys.exit(app.exec_())

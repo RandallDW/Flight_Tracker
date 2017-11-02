@@ -30,7 +30,7 @@ class MainWidget(QTabWidget):
 		self.tab2UI()		
 		self.tab3UI()
 		self.tab4UI()
-		self.setWindowTitle("Network Application Design")
+		self.setWindowTitle("Flight Tracker")
 		self.show()
 
 

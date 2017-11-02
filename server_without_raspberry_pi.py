@@ -6,7 +6,7 @@ import _thread
 import requests
 import threading
 from FlightStatus import *
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 
 """
 global
@@ -203,129 +203,6 @@ class ClientThread(threading.Thread) :
 
 
 
-		
-"""
-LED thread, control 7 segement LED show coresponding client number
-"""
-class LEDThread(threading.Thread):
-	def __init__(self):
-		threading.Thread.__init__(self)
-		self.num = 0;
-	#	self.num (int): client number
-	
-		GPIO.setwarnings(False)
-		GPIO.setmode(GPIO.BCM)
-		GPIO.setup(17, GPIO.OUT)
-		GPIO.setup(27, GPIO.OUT)
-		GPIO.setup(22, GPIO.OUT)
-
-		GPIO.setup(5, GPIO.OUT)
-		GPIO.setup(6, GPIO.OUT)
-		GPIO.setup(13, GPIO.OUT)
-		GPIO.setup(19, GPIO.OUT)
-
-
-	def run(self):
-
-		GPIO.output(17,True)
-		GPIO.output(27,True)
-		GPIO.output(22,True)
-
-		GPIO.output(5,True)
-		GPIO.output(6,True)
-		GPIO.output(13,True)
-		GPIO.output(19,True)
-		
-
-		while 1:
-			time.sleep(2)
-			self.num = threading.active_count() - 2
-			print(self.num)
-		
-			#print(Server.backlog)
-			#if (Server.client[0] == None):
-			if self.num == 0:
-				GPIO.output(17, True)
-				GPIO.output(27, False)
-				GPIO.output(22, False)
-				GPIO.output(5, False)
-				GPIO.output(6, False)
-				GPIO.output(13, False)
-				GPIO.output(19, False)
-			elif self.num == 1:
-				GPIO.output(17, True)
-				GPIO.output(27, True)
-				GPIO.output(22, True)
-				GPIO.output(5, False)
-				GPIO.output(6, True)
-				GPIO.output(13, True)
-				GPIO.output(19, False)
-			elif self.num == 2:
-				GPIO.output(17, False)
-				GPIO.output(27, True)
-				GPIO.output(22, False)
-				GPIO.output(5, False)
-				GPIO.output(6, False)
-				GPIO.output(13, False)
-				GPIO.output(19, True)
-			elif self.num == 3:
-				GPIO.output(17, False)
-				GPIO.output(27, True)
-				GPIO.output(22, False)
-				GPIO.output(5, False)
-				GPIO.output(6, True)
-				GPIO.output(13, False)
-				GPIO.output(19, False)
-			elif self.num == 4:
-				GPIO.output(17, False)
-				GPIO.output(27, False)
-				GPIO.output(22, True)
-				GPIO.output(5, False)
-				GPIO.output(6, True)
-				GPIO.output(13, True)
-				GPIO.output(19, False)
-			elif self.num == 5:
-				GPIO.output(17, False)
-				GPIO.output(27, False)
-				GPIO.output(22, False)
-				GPIO.output(5, True)
-				GPIO.output(6, True)
-				GPIO.output(13, False)
-				GPIO.output(19, False)
-			elif self.num == 6:
-				GPIO.output(17, False)
-				GPIO.output(27, False)
-				GPIO.output(22, False)
-				GPIO.output(5, True)
-				GPIO.output(6, False)
-				GPIO.output(13, False)
-				GPIO.output(19, False)
-			elif self.num == 7:
-				GPIO.output(17, True)
-				GPIO.output(27, True)
-				GPIO.output(22, False)
-				GPIO.output(5, False)
-				GPIO.output(6, True)
-				GPIO.output(13, True)
-				GPIO.output(19, False)
-			elif self.num == 8:
-				GPIO.output(17, False)
-				GPIO.output(27, False)
-				GPIO.output(22, False)
-				GPIO.output(5, False)
-				GPIO.output(6, False)
-				GPIO.output(13, False)
-				GPIO.output(19, False)
-			elif self.num == 9:
-				GPIO.output(17, False)
-				GPIO.output(27, False)
-				GPIO.output(22, False)
-				GPIO.output(5, False)
-				GPIO.output(6, True)
-				GPIO.output(13, False)
-				GPIO.output(19, False)
-	#def count_1(self):
-
 """
 	server 
 	hostAdd (str): host ip address
@@ -341,7 +218,7 @@ class Server(object):
 
 	# open server
 	def openServer(self):
-		port = 2000
+		port = 8000
 		size = 8192		
 		self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.server.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, size)
@@ -350,8 +227,8 @@ class Server(object):
 	# server start to listen
 	def startListen(self):
 		# LED thread
-		led = LEDThread()
-		led.start()
+		# led = LEDThread()
+		# led.start()
 
 		error_msg = '<socket.socket [closed] fd=-1, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0>'
 		print ('server started and listening..')
